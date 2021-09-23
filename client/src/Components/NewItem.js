@@ -63,10 +63,10 @@ export default class NewItem extends React.Component {
 
     // reset values
     this.setState({
-      category: '',
-      description: '',
-      quantity: 1
-    })
+      category: "",
+      description: "",
+      quantity: 1,
+    });
   };
 
   render() {

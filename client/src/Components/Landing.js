@@ -100,10 +100,10 @@ export default class Landing extends React.Component {
     }
 
     return (
-      <div>
-        <div>Welcome</div>
+      <div id='landing-container' className="landing-text">
+        <div id="welcome-div" className="landing-text">WELCOME</div>
         <div id="landing-botons-div">
-          <div>
+          <div id='new-list-button' className="landing-text">
             <Button
               id="login-button"
               variant="success"
@@ -112,13 +112,13 @@ export default class Landing extends React.Component {
               NEW LIST +
             </Button>
           </div>
-          <div>
-            <Form.Label>Old List</Form.Label>
+          <div id="old-list-div">
+            <Form.Label>Old Lists:</Form.Label>
             <Form.Select
               aria-label="Default select example"
               onChange={this.handleChange}
             >
-              <option defaultValue=''></option>
+            <option selected disabled value="">yyyy-mm-dd</option>
               {itemsList}
             </Form.Select>
           </div>

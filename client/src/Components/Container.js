@@ -54,8 +54,8 @@ export default class FieldContainer extends React.Component {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        items: [...JSON.parse(sessionStorage.getItem("items"))],
+      body: JSON?.stringify({
+        items: [...JSON?.parse(sessionStorage.getItem("items"))],
       }),
     })
       .then((res) => res.json())

@@ -6,7 +6,7 @@ import FieldContainer from './Components/Container';
 
 function App() {
   return (
-    <Router>
+    <Router id='main-container'>
       <Container id='main-container'>
         <Route exact={true} path='/' render={() => (
           <>
