@@ -6,7 +6,7 @@ import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import fetch from "isomorphic-fetch";
 import Modal from "react-bootstrap/Modal";
-// import Form from "react-bootstrap/Form";
+import "../index.css";
 
 export default class FieldContainer extends React.Component {
   constructor(props) {
@@ -19,6 +19,7 @@ export default class FieldContainer extends React.Component {
       dates: "",
       mode: "",
       listID: "",
+      responseHolder: "",
     };
 
     this.handleClose = this.handleClose.bind(this);
@@ -42,26 +43,33 @@ export default class FieldContainer extends React.Component {
           this.setState({
             listID: response.data,
           });
-          sessionStorage.setItem('listID', `${response.data}`)
+          sessionStorage.setItem("listID", `${response.data}`);
         },
         (err) => console.log(err)
       );
   }
 
   updateList() {
-    fetch(`/items/month/${this.state.listID}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON?.stringify({
-        items: [...JSON?.parse(sessionStorage.getItem("items"))],
-      }),
-    })
+    fetch(
+      `/items/month/${
+        this.state.listID ? this.state.listID : sessionStorage.getItem("listID")
+      }`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON?.stringify({
+          items: [...JSON?.parse(sessionStorage.getItem("items"))],
+        }),
+      }
+    )
       .then((res) => res.json())
       .then(
         (response) => {
-          console.log(response);
+          this.setState({
+            responseHolder: response,
+          });
         },
         (err) => console.log(err)
       );
@@ -100,7 +108,8 @@ export default class FieldContainer extends React.Component {
       this.setState({
         itemsArray: JSON.parse(sessionStorage.getItem("items")),
       });
-    if (this.state.listID) this.updateList();
+    if (this.state.listID || sessionStorage.getItem("listID"))
+      this.updateList();
 
     this.setState({
       showModal: false,
@@ -110,6 +119,7 @@ export default class FieldContainer extends React.Component {
   handleShow() {
     this.setState({
       showModal: true,
+      itemsArray: JSON.parse(sessionStorage.getItem("items")),
     });
   }
 
@@ -120,7 +130,7 @@ export default class FieldContainer extends React.Component {
         <Row>
           <Header />
         </Row>
-        <div>
+        <div className="add-boton-div">
           <Row>
             <Button variant="outline-primary" onClick={this.handleShow}>
               Add Item

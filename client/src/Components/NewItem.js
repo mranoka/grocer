@@ -1,6 +1,7 @@
 import React from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import { nanoid } from "nanoid";
 
 let holderArray = [];
 
@@ -50,6 +51,7 @@ export default class NewItem extends React.Component {
       category: this.state.category,
       price: null,
       quantity: this.state.quantity,
+      uuid: nanoid().toString(),
     };
 
     holderArray.push(newItem);
@@ -101,7 +103,7 @@ export default class NewItem extends React.Component {
             >
               <option value="">Select Food Category</option>
               <option value="household">Household</option>
-              <option value="frozen">Frozen Foods</option>
+              <option value="frozen">Refrigerated Foods</option>
               <option value="wet">Wet Foods</option>
               <option value="dry">Dry Foods</option>
             </Form.Select>

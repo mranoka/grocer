@@ -2,31 +2,27 @@ import React from "react";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/Col";
 import "../index.css";
-import Header from "./Header";
 
 export default class Items extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      itemCollection: [],
-      itemHolderArr: [],
       updateResponse: "",
       itemPrice: "",
       itemsTotal: 0,
+      priceSet: "",
     };
 
     this.handleDelete = this.handleDelete.bind(this);
     this.handlePriceCheck = this.handlePriceCheck.bind(this);
     this.handlePriceChange = this.handlePriceChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleQuantityChange = this.handleQuantityChange.bind(this);
   }
 
   componentDidMount() {
-    console.log("mount");
-    this.setState({
-      itemCollection: [...this.props.items],
-    });
+
   }
 
   updateList(newArray) {
@@ -69,10 +65,6 @@ export default class Items extends React.Component {
       this.updateList(this.itemRemover(this.props.items, event.target.value));
     }
 
-    this.setState({
-      itemCollection: this.itemRemover(this.props.items, event.target.value),
-    });
-
     sessionStorage.setItem(
       "items",
       JSON.stringify(this.itemRemover(this.props.items, event.target.value))
@@ -85,14 +77,12 @@ export default class Items extends React.Component {
   }
 
   handlePriceChange(event) {
-    const value = event.target.value;
-    // this.setState({
-    //   itemPrice: event.target.value,
-    // });
-    console.log(`${event.target.name} & ${value}`);
-    this.setState({
-      [event.target.name]: value,
+    this.props.items.forEach((item, index) => {
+      if (parseInt(event.target.id.substring(0, 1)) === index) {
+        item.price = event.target.value;
+      }
     });
+    sessionStorage.setItem("items", JSON.stringify(this.props.items));
   }
 
   handleSubmit(event) {
@@ -100,53 +90,32 @@ export default class Items extends React.Component {
     let holderArray = [];
     let total = 0;
 
-    let itemsHolder = [];
-    this.props.items?.forEach((item, index) => {
-      itemsHolder.push(`${item.itemName}${index}1`);
+    holderArray = [...JSON.parse(sessionStorage.getItem("items"))];
+
+    // get items total
+    holderArray.forEach((item) => {
+      if (item.price) total += parseInt(item.price) * parseInt(item.quantity);
     });
-
-    itemsHolder.forEach((itemOut) => {
-      if (event.target.elements[itemOut].value) {
-        let itemName = event.target.elements[itemOut].name.slice(
-          0,
-          event.target.elements[itemOut].name.length - 1
-        );
-        
-        event.target.elements["quantity"].forEach((item) => {
-          // calculate price total
-          if (item.id === itemName) {
-            total +=
-              parseInt(event.target.elements[itemOut].value) * item.value;
-          }
-        });
-        // set prices for items
-        this.props.items?.forEach((listItem, index) => {
-          if (`${listItem.itemName}${index}` === itemName && listItem.price === null) {
-            listItem.price =
-              parseInt(event.target.elements[itemOut].value) *
-              listItem.quantity;
-          }
-          holderArray.push(listItem);
-        });
-      }
-    });
-
-    sessionStorage.setItem("items", JSON.stringify(holderArray));
-
-    // sessionStorage.setItem('total', total) may use later
-
-    console.log(total);
 
     this.setState({
-      itemsTotal: total,
+      itemsTotal: total
+    })
+  }
+
+  handleQuantityChange(event) {
+    this.props.items.forEach((item, index) => {
+      if (parseInt(event.target.id.substring(0, 1)) === index) {
+        item.quantity = event.target.value;
+      }
     });
+    sessionStorage.setItem("items", JSON.stringify(this.props.items));
   }
 
   render() {
     const itemsList = this.props.items?.map((item, index) => (
-      <div className="item-container" key={Math.random() * 100}>
-        <Row key={Math.random() * 200}>
-          <Col key={Math.random() * 400}>
+      <div className="item-container" key={item.uuid}>
+        <Row key={item.uuid + "6"}>
+          <Col key={item.uuid + "5"}>
             <button
               className="btn btn-danger"
               onClick={this.handleDelete}
@@ -155,32 +124,35 @@ export default class Items extends React.Component {
               &times;
             </button>
           </Col>
-          <Col key={Math.random() * 300}>
+          <Col key={item.uuid + "4"}>
             <div className="item-description">
-              <span>{item.itemName}</span>
+              <span className="item-name">{item.itemName}</span>
             </div>
           </Col>
-          <Col key={Math.random() * 150}>
+          <Col key={item.uuid + "3"}>
             <input
               className="item-quantity"
               type="number"
               step="1"
-              value={item.quantity}
+              placeholder={item.quantity}
               name="quantity"
-              id={item.itemName + index}
+              id={index + item.itemName}
+              onChange={this.handleQuantityChange}
             />
           </Col>
-          <Col key={Math.random() * 190}>
+          <Col key={item.uuid + "2"}>
             <input
-              value={item.price}
+              placeholder={item.price ?? "price"}
               className="item-price"
               type="number"
-              placeholder="price"
-              name={item.itemName + index + "1"}
+              id={index + "price"}
+              name="priceSet"
+              onChange={this.handlePriceChange}
             />
           </Col>
-          <Col>
+          <Col key={item.uuid + "1"}>
             <input
+              className="item-checkbox"
               type="checkbox"
               value=""
               onChange={this.handlePriceCheck}
@@ -200,7 +172,9 @@ export default class Items extends React.Component {
               Get Total
             </button>
           </Col>
-          <Col>{this.state.itemsTotal}</Col>
+          <Col>
+            <span id="items-total">{this.state.itemsTotal}</span>
+          </Col>
         </Row>
         <hr />
         {itemsList}
