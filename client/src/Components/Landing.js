@@ -28,14 +28,12 @@ export default class Landing extends React.Component {
 
   handleDateSelect(event) {
     event.preventDefault();
+    sessionStorage.removeItem("items");
     sessionStorage.setItem(
       "dates",
       `${this.state.startDate} - ${this.state.endDate}`
     );
-    sessionStorage.setItem(
-      "sentinel",
-      `666`
-    );
+    sessionStorage.setItem("sentinel", `666`);
     this.setState({
       redirect: "/container",
     });
@@ -100,10 +98,12 @@ export default class Landing extends React.Component {
     }
 
     return (
-      <div id='landing-container' className="landing-text">
-        <div id="welcome-div" className="landing-text">WELCOME</div>
+      <div id="landing-container" className="landing-text">
+        <div id="welcome-div" className="landing-text">
+          WELCOME
+        </div>
         <div id="landing-botons-div">
-          <div id='new-list-button' className="landing-text">
+          <div id="new-list-button" className="landing-text">
             <Button
               id="login-button"
               variant="success"
@@ -118,7 +118,9 @@ export default class Landing extends React.Component {
               aria-label="Default select example"
               onChange={this.handleChange}
             >
-            <option selected disabled value="">yyyy-mm-dd</option>
+              <option selected disabled value="">
+                yyyy-mm-dd
+              </option>
               {itemsList}
             </Form.Select>
           </div>

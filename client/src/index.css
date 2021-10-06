@@ -2,19 +2,19 @@
   #items-list {
     margin-top: 20px;
   }
-  
+
   #main-container {
     color: blue;
   }
-  
+
   .landing-text {
     text-align: center;
   }
-  
+
   #old-list-div {
     text-align: left;
   }
-  
+
   #landing-container {
     margin: 0;
     position: absolute;
@@ -22,20 +22,20 @@
     left: 50%;
     transform: translate(-50%, -50%);
   }
-  
+
   #new-list-button {
     margin-top: 45px;
   }
-  
+
   #old-list-div {
     margin-top: 30px;
   }
 
   .item-quantity {
-    width: 20px;
+    width: 30px;
   }
   .item-price {
-    width: 50px;
+    width: 60px;
   }
 
   .item-description {
@@ -45,8 +45,60 @@
   .item-container {
     margin-bottom: 5px;
   }
+
+  .item-name {
+    position: relative;
+    top: 6px;
+  }
+  #items-total {
+    position: relative;
+    top: 7px;
+    left: 60px;
+  }
+  .item-checkbox {
+    position: relative;
+    top: 5px;
+  }
+  .add-boton-div {
+    margin-top: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  #header {
+    margin-top: 15px;
+    margin-left: 10px;
+  }
+
+  .bottom-header-row {
+    position: relative;
+    top: 5px;
+  }
+
+  .cat-icon {
+    font-size: 25px;
+  }
+
+  #refrigerated {
+    color: rgb(77, 195, 255);
+    font-weight: 900;
+  }
+
+  #dry-foods {
+    color: RGB(158, 162, 107);
+    font-weight: 900;
+  }
+
+  #household {
+    color: rgb(102, 204, 0);
+    font-weight: 900;
+  }
+
+  #wet-foods {
+    color: rgb(0, 102, 204);
+    font-weight: 900;
+  }
 }
 
 @media screen and (min-width: 581px) {
-
 }
