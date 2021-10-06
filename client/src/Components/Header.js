@@ -22,7 +22,7 @@ function Header() {
               </Col>
             </Row>
             <Row className="bottom-header-row">
-              <Col id="household" >
+              <Col id="household-icon" >
               <span className="cat-icon"><GiHouse /></span> Household
               </Col>
               <Col id="wet-foods">

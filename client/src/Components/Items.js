@@ -12,6 +12,7 @@ export default class Items extends React.Component {
       itemPrice: "",
       itemsTotal: 0,
       priceSet: "",
+      totalSentinel: false,
     };
 
     this.handleDelete = this.handleDelete.bind(this);
@@ -21,9 +22,7 @@ export default class Items extends React.Component {
     this.handleQuantityChange = this.handleQuantityChange.bind(this);
   }
 
-  componentDidMount() {
-
-  }
+  componentDidMount() {}
 
   updateList(newArray) {
     fetch(`/items/month/${sessionStorage.getItem("listID")}`, {
@@ -83,14 +82,20 @@ export default class Items extends React.Component {
       }
     });
     sessionStorage.setItem("items", JSON.stringify(this.props.items));
+
+    if (!this.state.totalSentinel)
+      this.setState({
+        totalSentinel: true,
+      });
   }
 
   handleSubmit(event) {
     event.preventDefault(); // prevent page reload on form submission
     let holderArray = [];
     let total = 0;
-
-    holderArray = [...JSON.parse(sessionStorage.getItem("items"))];
+    
+    if (JSON.parse(sessionStorage.getItem("items")))
+      holderArray = [...JSON.parse(sessionStorage.getItem("items"))];
 
     // get items total
     holderArray.forEach((item) => {
@@ -98,8 +103,9 @@ export default class Items extends React.Component {
     });
 
     this.setState({
-      itemsTotal: total
-    })
+      itemsTotal: total,
+      totalSentinel: false,
+    });
   }
 
   handleQuantityChange(event) {
@@ -109,11 +115,16 @@ export default class Items extends React.Component {
       }
     });
     sessionStorage.setItem("items", JSON.stringify(this.props.items));
+
+    if (!this.state.totalSentinel)
+      this.setState({
+        totalSentinel: true,
+      });
   }
 
   render() {
     const itemsList = this.props.items?.map((item, index) => (
-      <div className="item-container" key={item.uuid}>
+      <div id={item.category} className="item-container" key={item.uuid}>
         <Row key={item.uuid + "6"}>
           <Col key={item.uuid + "5"}>
             <button
@@ -173,7 +184,12 @@ export default class Items extends React.Component {
             </button>
           </Col>
           <Col>
-            <span id="items-total">{this.state.itemsTotal}</span>
+            <span
+              className={this.state.totalSentinel ? "strike-red" : "no-strike"}
+              id="items-total"
+            >
+              {this.state.itemsTotal}
+            </span>
           </Col>
         </Row>
         <hr />
