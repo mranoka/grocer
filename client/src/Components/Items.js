@@ -13,6 +13,7 @@ export default class Items extends React.Component {
       itemsTotal: 0,
       priceSet: "",
       totalSentinel: false,
+      priceCheck: false,
     };
 
     this.handleDelete = this.handleDelete.bind(this);
@@ -71,8 +72,10 @@ export default class Items extends React.Component {
   }
 
   handlePriceCheck(event) {
-    console.log(event.target.checked);
-    console.log(event.target.value);
+    console.log(event.target.className);
+    // this.setState({
+    //   priceCheck: event.target.checked
+    // })
   }
 
   handlePriceChange(event) {
@@ -93,7 +96,7 @@ export default class Items extends React.Component {
     event.preventDefault(); // prevent page reload on form submission
     let holderArray = [];
     let total = 0;
-    
+
     if (JSON.parse(sessionStorage.getItem("items")))
       holderArray = [...JSON.parse(sessionStorage.getItem("items"))];
 
@@ -176,10 +179,10 @@ export default class Items extends React.Component {
 
     return (
       <form onSubmit={this.handleSubmit} id="items-list">
-        <hr />
-        <Row>
+        <Row id="totals-row">
+          <hr id="line-one"/>
           <Col>
-            <button type="submit" className="btn btn-dark">
+            <button type="submit" className="btn btn-dark" id="totalz-boton">
               Get Total
             </button>
           </Col>
@@ -191,9 +194,10 @@ export default class Items extends React.Component {
               {this.state.itemsTotal}
             </span>
           </Col>
+          <hr id="line-two" />
         </Row>
-        <hr />
-        {itemsList}
+
+        <div id="serious-container">{itemsList}</div>
       </form>
     );
   }

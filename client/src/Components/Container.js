@@ -130,37 +130,39 @@ export default class FieldContainer extends React.Component {
         <Row>
           <Header />
         </Row>
-        <div className="add-boton-div">
-          <Row>
-            <Button variant="outline-primary" onClick={this.handleShow}>
-              Add Item
-            </Button>
-          </Row>
-        </div>
-        <Items
-          items={
-            this.state.mode === "0"
-              ? this.state.savedItemsArray
-              : this.state.itemsArray
-          }
-        />
-        <Modal
-          show={this.state.showModal}
-          onHide={this.handleClose}
-          backdrop="static"
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>{this.state.dates}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <NewItem />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={this.handleClose}>
-              Close
-            </Button>
-          </Modal.Footer>
-        </Modal>
+        <Row className="body-row">
+          <div className="add-boton-div">
+            <Row>
+              <Button id="add-boton" variant="outline-primary" onClick={this.handleShow}>
+                Add Item
+              </Button>
+            </Row>
+          </div>
+          <Items
+            items={
+              this.state.mode === "0"
+                ? this.state.savedItemsArray
+                : this.state.itemsArray
+            }
+          />
+          <Modal
+            show={this.state.showModal}
+            onHide={this.handleClose}
+            backdrop="static"
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>{this.state.dates}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <NewItem />
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={this.handleClose}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </Row>
       </div>
     );
   }
