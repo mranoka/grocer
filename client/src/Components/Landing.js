@@ -64,8 +64,15 @@ export default class Landing extends React.Component {
     });
   }
 
-  handleChange() {
+  handleChange(e) {
+    sessionStorage.setItem("listID", e.target.value);
+    sessionStorage.setItem("sentinel", `777`);
     sessionStorage.setItem("mode", "0");
+
+    this.setState({
+      redirect: "/container",
+    });
+    
   }
 
   fetchData() {
@@ -88,7 +95,7 @@ export default class Landing extends React.Component {
   render() {
     let items = this.state.itemsArray;
     let itemsList = items.map((item) => (
-      <option id={item._id + "1568"} value={item._id}>
+      <option key={item._id} id={item._id + "1568"} value={item._id}>
         {item.listDate}
       </option>
     ));
