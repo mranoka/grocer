@@ -12,6 +12,8 @@ export default class Items extends React.Component {
       itemPrice: "",
       itemsTotal: 0,
       priceSet: "",
+      totalSentinel: false,
+      priceCheck: false,
     };
 
     this.handleDelete = this.handleDelete.bind(this);
@@ -21,9 +23,7 @@ export default class Items extends React.Component {
     this.handleQuantityChange = this.handleQuantityChange.bind(this);
   }
 
-  componentDidMount() {
-
-  }
+  componentDidMount() {}
 
   updateList(newArray) {
     fetch(`/items/month/${sessionStorage.getItem("listID")}`, {
@@ -72,8 +72,10 @@ export default class Items extends React.Component {
   }
 
   handlePriceCheck(event) {
-    console.log(event.target.checked);
-    console.log(event.target.value);
+    console.log(event.target.className);
+    // this.setState({
+    //   priceCheck: event.target.checked
+    // })
   }
 
   handlePriceChange(event) {
@@ -83,6 +85,11 @@ export default class Items extends React.Component {
       }
     });
     sessionStorage.setItem("items", JSON.stringify(this.props.items));
+
+    if (!this.state.totalSentinel)
+      this.setState({
+        totalSentinel: true,
+      });
   }
 
   handleSubmit(event) {
@@ -90,7 +97,8 @@ export default class Items extends React.Component {
     let holderArray = [];
     let total = 0;
 
-    holderArray = [...JSON.parse(sessionStorage.getItem("items"))];
+    if (JSON.parse(sessionStorage.getItem("items")))
+      holderArray = [...JSON.parse(sessionStorage.getItem("items"))];
 
     // get items total
     holderArray.forEach((item) => {
@@ -98,8 +106,9 @@ export default class Items extends React.Component {
     });
 
     this.setState({
-      itemsTotal: total
-    })
+      itemsTotal: total,
+      totalSentinel: false,
+    });
   }
 
   handleQuantityChange(event) {
@@ -109,11 +118,16 @@ export default class Items extends React.Component {
       }
     });
     sessionStorage.setItem("items", JSON.stringify(this.props.items));
+
+    if (!this.state.totalSentinel)
+      this.setState({
+        totalSentinel: true,
+      });
   }
 
   render() {
     const itemsList = this.props.items?.map((item, index) => (
-      <div className="item-container" key={item.uuid}>
+      <div id={item.category} className="item-container" key={item.uuid}>
         <Row key={item.uuid + "6"}>
           <Col key={item.uuid + "5"}>
             <button
@@ -165,19 +179,25 @@ export default class Items extends React.Component {
 
     return (
       <form onSubmit={this.handleSubmit} id="items-list">
-        <hr />
-        <Row>
+        <Row id="totals-row">
+          <hr id="line-one"/>
           <Col>
-            <button type="submit" className="btn btn-dark">
+            <button type="submit" className="btn btn-dark" id="totalz-boton">
               Get Total
             </button>
           </Col>
           <Col>
-            <span id="items-total">{this.state.itemsTotal}</span>
+            <span
+              className={this.state.totalSentinel ? "strike-red" : "no-strike"}
+              id="items-total"
+            >
+              {this.state.itemsTotal}
+            </span>
           </Col>
+          <hr id="line-two" />
         </Row>
-        <hr />
-        {itemsList}
+
+        <div id="serious-container">{itemsList}</div>
       </form>
     );
   }

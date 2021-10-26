@@ -76,12 +76,17 @@ export default class FieldContainer extends React.Component {
   }
 
   fetchData() {
-    fetch("/items/all")
+    fetch(`/item/${sessionStorage.getItem("listID")}`)
       .then((res) => res.json())
       .then(
         (response) => {
+          sessionStorage.setItem(
+            "items",
+            JSON.stringify(response.item[0].items)
+          );
           this.setState({
-            savedItemsArray: response.items[0].items,
+            savedItemsArray: response.item[0].items,
+            dates: response.item[0].listDate,
           });
         },
         (err) => console.log(err)
@@ -100,14 +105,24 @@ export default class FieldContainer extends React.Component {
       sessionStorage.setItem("sentinel", `661`);
     }
 
-    if (this.state.mode === "0") this.fetchData();
+    if (sessionStorage.getItem("mode") === "0") {
+      this.fetchData();
+    }
   }
 
   handleClose() {
-    if (JSON.parse(sessionStorage.getItem("items")))
-      this.setState({
-        itemsArray: JSON.parse(sessionStorage.getItem("items")),
-      });
+    if (JSON.parse(sessionStorage.getItem("items"))) {
+      if (this.state.mode === "0") {
+        this.setState({
+          savedItemsArray: JSON.parse(sessionStorage.getItem("items")),
+        });
+      } else {
+        this.setState({
+          itemsArray: JSON.parse(sessionStorage.getItem("items")),
+        });
+      }
+    }
+
     if (this.state.listID || sessionStorage.getItem("listID"))
       this.updateList();
 
@@ -130,37 +145,43 @@ export default class FieldContainer extends React.Component {
         <Row>
           <Header />
         </Row>
-        <div className="add-boton-div">
-          <Row>
-            <Button variant="outline-primary" onClick={this.handleShow}>
-              Add Item
-            </Button>
-          </Row>
-        </div>
-        <Items
-          items={
-            this.state.mode === "0"
-              ? this.state.savedItemsArray
-              : this.state.itemsArray
-          }
-        />
-        <Modal
-          show={this.state.showModal}
-          onHide={this.handleClose}
-          backdrop="static"
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>{this.state.dates}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <NewItem />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={this.handleClose}>
-              Close
-            </Button>
-          </Modal.Footer>
-        </Modal>
+        <Row className="body-row">
+          <div className="add-boton-div">
+            <Row>
+              <Button
+                id="add-boton"
+                variant="outline-primary"
+                onClick={this.handleShow}
+              >
+                Add Item
+              </Button>
+            </Row>
+          </div>
+          <Items
+            items={
+              this.state.mode === "0"
+                ? this.state.savedItemsArray
+                : this.state.itemsArray
+            }
+          />
+          <Modal
+            show={this.state.showModal}
+            onHide={this.handleClose}
+            backdrop="static"
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>{this.state.dates}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <NewItem />
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={this.handleClose}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </Row>
       </div>
     );
   }
