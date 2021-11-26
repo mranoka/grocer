@@ -135,6 +135,10 @@ export default class Items extends React.Component {
   }
 
   orderByCategory(itemsArray) {
+    // avoid breaking app on initial load due to empty itemsArray
+    if (itemsArray === null) {
+      return
+    }
     let dryArray = [];
     let wetArray = [];
     let houseArray = [];
