@@ -79,12 +79,14 @@ export default class Items extends React.Component {
   }
 
   handlePriceChange(event) {
-    this.props.items.forEach((item, index) => {
-      if (parseInt(event.target.id.substring(0, 1)) === index) {
+    this.props.items.forEach((item) => {
+      if (item.uuid === event.target.id) {
         item.price = event.target.value;
       }
     });
     sessionStorage.setItem("items", JSON.stringify(this.props.items));
+
+   // console.log(JSON.parse(sessionStorage.getItem("items")))
 
     if (!this.state.totalSentinel)
       this.setState({
@@ -98,23 +100,30 @@ export default class Items extends React.Component {
     let total = 0;
 
     if (JSON.parse(sessionStorage.getItem("items")))
-      holderArray = [...JSON.parse(sessionStorage.getItem("items"))];
-
+      holderArray = [...JSON.parse(sessionStorage.getItem("items"))]; 
     // get items total
     holderArray.forEach((item) => {
-      if (item.price) total += parseInt(item.price) * parseInt(item.quantity);
+      if (item.price) {
+        total += parseInt(item.price) * parseInt(item.quantity);
+      }
+      
     });
 
     this.setState({
       itemsTotal: total,
       totalSentinel: false,
     });
+
+    // update remote list
+    this.updateList(holderArray);
   }
 
   handleQuantityChange(event) {
+    console.log(event.target.id)
     this.props.items.forEach((item, index) => {
-      if (parseInt(event.target.id.substring(0, 1)) === index) {
+      if (event.target.id=== item.uuid) {
         item.quantity = event.target.value;
+        console.log(item.itemName)
       }
     });
     sessionStorage.setItem("items", JSON.stringify(this.props.items));
@@ -125,8 +134,25 @@ export default class Items extends React.Component {
       });
   }
 
+  orderByCategory(itemsArray) {
+    let dryArray = [];
+    let wetArray = [];
+    let houseArray = [];
+    let frozenArray = [];
+
+    itemsArray.forEach((item) => {
+      if (item.category === "household") houseArray.push(item);
+      else if (item.category === "frozen") frozenArray.push(item);
+      else if (item.category === "wet") wetArray.push(item);
+      else dryArray.push(item);
+    });
+
+    return [...houseArray, ...frozenArray, ...dryArray, ...wetArray];
+  }
+
   render() {
-    const itemsList = this.props.items?.map((item, index) => (
+    let orderedArray = this.orderByCategory(this.props.items);
+    const itemsList = orderedArray?.map((item, index) => (
       <div id={item.category} className="item-container" key={item.uuid}>
         <Row key={item.uuid + "6"}>
           <Col key={item.uuid + "5"}>
@@ -150,7 +176,7 @@ export default class Items extends React.Component {
               step="1"
               placeholder={item.quantity}
               name="quantity"
-              id={index + item.itemName}
+              id={item.uuid}
               onChange={this.handleQuantityChange}
             />
           </Col>
@@ -159,7 +185,7 @@ export default class Items extends React.Component {
               placeholder={item.price ?? "price"}
               className="item-price"
               type="number"
-              id={index + "price"}
+              id={item.uuid}
               name="priceSet"
               onChange={this.handlePriceChange}
             />
@@ -180,7 +206,7 @@ export default class Items extends React.Component {
     return (
       <form onSubmit={this.handleSubmit} id="items-list">
         <Row id="totals-row">
-          <hr id="line-one"/>
+          <hr id="line-one" />
           <Col>
             <button type="submit" className="btn btn-dark" id="totalz-boton">
               Get Total
