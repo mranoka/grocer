@@ -1,0 +1,4 @@
+- Home button to navigate to landing page to choose different list
+- Metrics *
+- Hamburger menu on landing page
+- show display month names for list titles
