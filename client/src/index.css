@@ -136,8 +136,8 @@
 
   #serious-container {
     position: relative;
-    top: 110px;
-    height: 800px;
+    top: 120px;
+    /* height: 100vh; */
     overflow-x: hidden;
 
   }
@@ -154,7 +154,7 @@
 
   #totals-row {
     position: fixed;
-    top: 160px;
+    top: 175px;
     width: 250px;
   }
 
@@ -164,6 +164,10 @@
 
   #line-one {
     margin-top: 10px;
+  }
+
+  #add-item-div {
+    margin-top: 20px;
   }
 
 }

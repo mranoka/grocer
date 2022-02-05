@@ -3,8 +3,8 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import fetch from "isomorphic-fetch";
 import Modal from "react-bootstrap/Modal";
-// import FieldContainer from "./Container";
 import { Redirect } from "react-router-dom";
+import { GiHamburgerMenu } from "react-icons/gi";
 
 export default class Landing extends React.Component {
   constructor(props) {
@@ -106,6 +106,9 @@ export default class Landing extends React.Component {
 
     return (
       <div id="landing-container" className="landing-text">
+      <div>
+        <span> <GiHamburgerMenu /></span>
+      </div>
         <div id="welcome-div" className="landing-text">
           WELCOME
         </div>

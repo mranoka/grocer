@@ -147,7 +147,7 @@ export default class FieldContainer extends React.Component {
         </Row>
         <Row className="body-row">
           <div className="add-boton-div">
-            <Row>
+            <Row id="add-item-div">
               <Button
                 id="add-boton"
                 variant="outline-primary"
