@@ -8,6 +8,9 @@ import fetch from "isomorphic-fetch";
 import Modal from "react-bootstrap/Modal";
 import "../index.css";
 
+const abortController = new AbortController();
+
+
 export default class FieldContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -27,16 +30,19 @@ export default class FieldContainer extends React.Component {
   }
 
   startList() {
-    fetch("/new/item", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        dates: sessionStorage.getItem("dates"),
-        items: [],
-      }),
-    })
+    fetch(
+      "/new/item",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          dates: sessionStorage.getItem("dates"),
+          items: [],
+        }),
+      }
+    )
       .then((res) => res.json())
       .then(
         (response) => {
@@ -108,6 +114,17 @@ export default class FieldContainer extends React.Component {
     if (sessionStorage.getItem("mode") === "0") {
       this.fetchData();
     }
+
+    window.addEventListener("beforeunload", () => {
+      this.updateList();
+    }); // saves everything when user reloads
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("beforeunload", this.updateList()); // remove the event handler for normal unmounting
+    abortController.abort(); // eliminate subscriptions to asynchronous
+    // functions to avoid calling setState()
+    // on unmounted components
   }
 
   handleClose() {

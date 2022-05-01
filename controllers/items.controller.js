@@ -1,12 +1,26 @@
 const mongoose = require("mongoose");
 const Item = require("../models/item.model");
 mongoose.set("useFindAndModify", false);
+const crypto = require("crypto");
 
-exports.newItems = (req, res) => {
-  // create new document and persist to database
+exports.addNewUserProfile = (req, res) => {
+
+  let hashAlgorithmToUse = crypto.getHashes()[4];
+  const secret = "mayTheForceBeWithYouTheySaid";
+
+  const passwordHash = crypto
+    .createHash(hashAlgorithmToUse, secret)
+    // updating data
+    .update(req.body.passWord)
+    // Encoding to be used
+    .digest("hex");
+
+  // create new user profile and persist to database
   const newItem = new Item({
-    listDate: req.body.dates,
-    items: req.body.items,
+    userName: req.body.userName,
+    password: passwordHash,
+    isAdmin: req.body.isPrivileged,
+    lists: req.body.itemLists
   });
 
   newItem.save((err, data) => {
@@ -15,7 +29,7 @@ exports.newItems = (req, res) => {
         .status(400)
         .send({
           ErrorMessage:
-            `Error occured while adding item to database: Item not added: ${err}`,
+            `Error occured while adding item to database: Item not added. Info: ${err}`,
         });
     } else {
       res.status(200).send({ data: data._id });

@@ -21,7 +21,7 @@ const itemsChildSchema = mongoose.Schema({
   },
 });
 
-const itemsParentSchema = mongoose.Schema({
+const listsChildSchema = mongoose.Schema({
   listDate: {
     type: String,
     required: true,
@@ -29,4 +29,20 @@ const itemsParentSchema = mongoose.Schema({
   items: [itemsChildSchema],
 });
 
-module.exports = mongoose.model("grocer", itemsParentSchema, "Items");
+const usersParentSchema = mongoose.Schema({
+  userName: {
+    type: String,
+    required: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  isAdmin: {
+    type: Boolean,
+    required: true,
+  },
+  lists: [listsChildSchema],
+});
+
+module.exports = mongoose.model("grocer", usersParentSchema, "Items");

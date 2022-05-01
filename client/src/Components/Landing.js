@@ -127,8 +127,9 @@ export default class Landing extends React.Component {
             <Form.Select
               aria-label="Default select example"
               onChange={this.handleChange}
+              value="yyyy-mm-dd"
             >
-              <option selected disabled value="">
+              <option defaultValue={"yyyy-mm-dd"} disabled>
                 yyyy-mm-dd
               </option>
               {itemsList}

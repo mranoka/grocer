@@ -134,12 +134,42 @@
     opacity: 0.5;
   }
 
-  #serious-container {
-    position: relative;
+  .serious-container-small {
+    position: fixed;
     top: 120px;
-    /* height: 100vh; */
+    margin-top: 150px;
+    width: 95vw;
+    height: 50vh;
+    overflow-y: scroll;
     overflow-x: hidden;
+    
+  }
 
+  .serious-container-big {
+    position: fixed;
+    top: -100px;
+    margin-top: 150px;
+    width: 95vw;
+    height: 90vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+
+  .show-expander {
+    visibility: hidden;
+  }
+
+  .show-shrinker {
+    visibility: hidden;
+  }
+
+  #scroll-pane-expander {
+    position: fixed;
+  }
+
+  #scroll-pane-shrinker {
+    position: fixed;
+    top: -10px;
   }
 
   .body-row {

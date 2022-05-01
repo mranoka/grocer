@@ -1,7 +1,7 @@
 const items = require("../controllers/items.controller");
 
 exports.itemsAdd = (app) => {
-    app.post('/new/item', items.newItems);
+    app.post('/new/userprofile', items.addNewUserProfile);
 }
 
 exports.itemsGetById = (app) => {
