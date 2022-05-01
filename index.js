@@ -16,8 +16,9 @@ app.use(express.json());
 require('./routes/items.routes').itemsAdd(app);
 require('./routes/items.routes').itemsGetById(app);
 require('./routes/items.routes').itemsUpdate(app);
-require('./routes/items.routes').itemsGetAll(app);
+require('./routes/items.routes').getUserItems(app);
 require('./routes/items.routes').deleteItem(app);
+require('./routes/items.routes').addListItems(app);
 require('./routes/users.routes').addNewUser(app);
 require('./routes/users.routes').getAllUsers(app);
 

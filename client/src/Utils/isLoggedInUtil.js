@@ -1,6 +1,6 @@
 const isLoggedIn = function() {
 //   return sessionStorage.getItem("sessionStatus") === "True";
-return false;
+return true;
 }
 
 export default isLoggedIn;

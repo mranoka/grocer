@@ -37,8 +37,8 @@ exports.addNewUserProfile = (req, res) => {
   });
 };
 
-exports.itemsGetAll = (req, res) => {
-    Item.find({}, (err, data) => {
+exports.getAllUserItems = (req, res) => {
+    Item.find({userName: req.params.userId}, (err, data) => {
         if (err) {
             res
               .status(400)
@@ -46,7 +46,7 @@ exports.itemsGetAll = (req, res) => {
                 ErrorMessage: "Error occured while retrieving records from database",
               });
           } else {
-            res.status(200).send({ items: data });
+            res.status(200).send({ items: data.lists });
           }
     })
 }
@@ -70,6 +70,29 @@ exports.updateItem = (req, res) => {
   Item.updateOne(
     { _id: req.params.id },
     { items: req.body.items },
+    (err, data) => {
+      if (err) {
+        res
+          .status(400)
+          .send({
+            ErrorMessage: "Error occured while updating item: Item not added",
+          });
+      } else {
+        res
+          .status(200)
+          .send({
+            documentsMatched: data.nModified,
+            documentsModified: data.nModified,
+          });
+      }
+    }
+  );
+};
+
+exports.addNewItemsList = (req, res) => {
+  Item.updateOne(
+    { userName: req.body.id },
+    { lists: req.body.items },
     (err, data) => {
       if (err) {
         res

@@ -5,6 +5,7 @@ import fetch from "isomorphic-fetch";
 import Modal from "react-bootstrap/Modal";
 import { Redirect } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
+import getUserItems from "../Utils/loadUserItems";
 
 export default class Landing extends React.Component {
   constructor(props) {
@@ -72,24 +73,30 @@ export default class Landing extends React.Component {
     this.setState({
       redirect: "/container",
     });
-    
   }
 
-  fetchData() {
-    fetch("/items/all")
+  fetchUserData(userId) {
+    fetch(`/items/all/${userId}`)
       .then((res) => res.json())
       .then(
         (response) => {
-          this.setState({
-            itemsArray: response.items,
-          });
+          if (response.length > 0) {
+            this.setState({
+              itemsArray: response.items,
+            });
+          } else {
+            this.setState({
+              itemsArray: [],
+            });
+          }
+          
         },
         (err) => console.log(err)
       );
   }
 
   componentDidMount() {
-    this.fetchData();
+    this.fetchUserData("mahamo.ranoka@gmail.com");
   }
 
   render() {
@@ -106,9 +113,12 @@ export default class Landing extends React.Component {
 
     return (
       <div id="landing-container" className="landing-text">
-      <div>
-        <span> <GiHamburgerMenu /></span>
-      </div>
+        <div>
+          <span>
+            {" "}
+            <GiHamburgerMenu />
+          </span>
+        </div>
         <div id="welcome-div" className="landing-text">
           WELCOME
         </div>

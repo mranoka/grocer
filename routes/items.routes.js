@@ -12,10 +12,14 @@ exports.itemsUpdate = (app) => {
     app.put('/items/month/:id', items.updateItem);
 }
 
-exports.itemsGetAll = (app) => {
-    app.get('/items/all', items.itemsGetAll);
+exports.getUserItems = (app) => {
+    app.get('/items/all/:userId', items.getAllUserItems);
 }
 
 exports.deleteItem = (app) => {
     app.delete('/item', items.deleteItem)
+}
+
+exports.addListItems = (app) => {
+    app.put("/add/list", items.addNewItemsList)
 }
