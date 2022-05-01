@@ -55,6 +55,34 @@ export default class FieldContainer extends React.Component {
       );
   }
 
+  startNewItemsList() {
+    fetch(
+      "/new/list",
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: "mahamo.ranoka@gmail.com",
+          dates: sessionStorage.getItem("dates"),
+          items: [],
+        }),
+      }
+    )
+      .then((res) => res.json())
+      .then(
+        (response) => {
+          console.log(response)
+          // this.setState({
+          //   listID: response.data,
+          // });
+          // sessionStorage.setItem("listID", `${response.data}`);
+        },
+        (err) => console.log(err)
+      );
+  }
+
   updateList() {
     fetch(
       `/items/month/${
@@ -107,7 +135,7 @@ export default class FieldContainer extends React.Component {
     });
 
     if (sessionStorage.getItem("sentinel") === "666") {
-      this.startList();
+      this.startNewItemsList();
       sessionStorage.setItem("sentinel", `661`);
     }
 
@@ -121,8 +149,8 @@ export default class FieldContainer extends React.Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener("beforeunload", this.updateList()); // remove the event handler for normal unmounting
-    abortController.abort(); // eliminate subscriptions to asynchronous
+    // window.removeEventListener("beforeunload", this.updateList()); // remove the event handler for normal unmounting
+    // abortController.abort(); // eliminate subscriptions to asynchronous
     // functions to avoid calling setState()
     // on unmounted components
   }

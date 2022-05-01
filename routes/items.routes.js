@@ -1,6 +1,6 @@
 const items = require("../controllers/items.controller");
 
-exports.itemsAdd = (app) => {
+exports.addUserProfile = (app) => {
     app.post('/new/userprofile', items.addNewUserProfile);
 }
 
@@ -13,7 +13,7 @@ exports.itemsUpdate = (app) => {
 }
 
 exports.getUserItems = (app) => {
-    app.get('/items/all/:userId', items.getAllUserItems);
+    app.get('/items/all/:userId', items.getAllUserLists);
 }
 
 exports.deleteItem = (app) => {
@@ -21,5 +21,5 @@ exports.deleteItem = (app) => {
 }
 
 exports.addListItems = (app) => {
-    app.put("/add/list", items.addNewItemsList)
+    app.put("/new/list", items.addNewItemsList)
 }

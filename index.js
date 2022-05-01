@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json()); 
 
 // routes
-require('./routes/items.routes').itemsAdd(app);
+require('./routes/items.routes').addUserProfile(app);
 require('./routes/items.routes').itemsGetById(app);
 require('./routes/items.routes').itemsUpdate(app);
 require('./routes/items.routes').getUserItems(app);
