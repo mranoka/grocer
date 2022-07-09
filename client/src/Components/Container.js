@@ -10,7 +10,6 @@ import "../index.css";
 
 const abortController = new AbortController();
 
-
 export default class FieldContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -30,19 +29,16 @@ export default class FieldContainer extends React.Component {
   }
 
   startList() {
-    fetch(
-      "/new/item",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          dates: sessionStorage.getItem("dates"),
-          items: [],
-        }),
-      }
-    )
+    fetch("/new/item", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        dates: sessionStorage.getItem("dates"),
+        items: [],
+      }),
+    })
       .then((res) => res.json())
       .then(
         (response) => {
@@ -56,48 +52,39 @@ export default class FieldContainer extends React.Component {
   }
 
   startNewItemsList() {
-    fetch(
-      "/new/list",
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId: "mahamo.ranoka@gmail.com",
-          dates: sessionStorage.getItem("dates"),
-          items: [],
-        }),
-      }
-    )
+    fetch("/new/list", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: "mahamo.ranoka@gmail.com",
+        dates: sessionStorage.getItem("dates"),
+        items: [],
+      }),
+    })
       .then((res) => res.json())
       .then(
         (response) => {
-          console.log(response)
-          // this.setState({
-          //   listID: response.data,
-          // });
-          // sessionStorage.setItem("listID", `${response.data}`);
+          this.setState({
+            listID: response.data._id,
+          });
+          sessionStorage.setItem("listID", `${response.data._id}`);
         },
         (err) => console.log(err)
       );
   }
 
   updateList() {
-    fetch(
-      `/items/month/${
-        this.state.listID ? this.state.listID : sessionStorage.getItem("listID")
-      }`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON?.stringify({
-          items: [...JSON?.parse(sessionStorage.getItem("items"))],
-        }),
-      }
-    )
+    fetch(`/items/month/${sessionStorage.getItem("userID")}/${sessionStorage.getItem("listID")}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON?.stringify({
+        items: [...JSON?.parse(sessionStorage.getItem("items"))],
+      }),
+    })
       .then((res) => res.json())
       .then(
         (response) => {
@@ -110,17 +97,18 @@ export default class FieldContainer extends React.Component {
   }
 
   fetchData() {
-    fetch(`/item/${sessionStorage.getItem("listID")}`)
+    fetch(
+      `/item/${sessionStorage.getItem("userID")}/${sessionStorage.getItem(
+        "listID"
+      )}`
+    )
       .then((res) => res.json())
       .then(
         (response) => {
-          sessionStorage.setItem(
-            "items",
-            JSON.stringify(response.item[0].items)
-          );
+          sessionStorage.setItem("items", JSON.stringify(response.items));
           this.setState({
-            savedItemsArray: response.item[0].items,
-            dates: response.item[0].listDate,
+            savedItemsArray: response.items,
+            dates: response.listDate,
           });
         },
         (err) => console.log(err)

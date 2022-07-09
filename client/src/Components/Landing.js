@@ -5,7 +5,6 @@ import fetch from "isomorphic-fetch";
 import Modal from "react-bootstrap/Modal";
 import { Redirect } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
-import getUserItems from "../Utils/loadUserItems";
 
 export default class Landing extends React.Component {
   constructor(props) {
@@ -80,9 +79,10 @@ export default class Landing extends React.Component {
       .then((res) => res.json())
       .then(
         (response) => {
-          if (response.length > 0) {
+          sessionStorage.setItem("userID", `${response.userId}`)
+          if (response.lists.length > 0) {
             this.setState({
-              itemsArray: response.items,
+              itemsArray: response.lists,
             });
           } else {
             this.setState({

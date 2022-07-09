@@ -35,7 +35,7 @@ export default class Items extends React.Component {
   componentDidMount() {}
 
   updateList(newArray) {
-    fetch(`/items/month/${sessionStorage.getItem("listID")}`, {
+    fetch(`/items/month/${sessionStorage.getItem("userID")}/${sessionStorage.getItem("listID")}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

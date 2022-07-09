@@ -25,6 +25,7 @@ exports.addNewUserProfile = (req, res) => {
   newItem.save((err, data) => {
     if (err) {
       res.status(400).send({
+        data: "",
         ErrorMessage: `Error occured while adding item to database: Item not added. Info: ${err}`,
       });
     } else {
@@ -40,40 +41,71 @@ exports.getAllUserLists = (req, res) => {
         ErrorMessage: "Error occured while retrieving records from database",
       });
     } else {
-      res.status(200).send({ lists: data[0].lists });
+      res.status(200).send({ lists: data[0].lists, userId: data[0]._id });
     }
   });
 };
 
 exports.oldItemsById = (req, res) => {
-  Item.find({ _id: req.params.id }, (err, data) => {
+  Item.find({ _id: req.params.userId }, (err, data) => {
     if (err) {
       res.status(400).send({
-        ErrorMessage: "Error occured while retrieving record from database",
+        items: [],
+        listDate: "",
+        ErrorMessage: "Erro occured while retrieving record from database",
       });
     } else {
-      res.status(200).send({ item: data });
+      let listsArr = data[0].lists;
+
+      for (let i = 0; i < listsArr.length; i++) {
+        if (listsArr[i]._id == req.params.listId) {
+          res
+            .status(200)
+            .send({ items: listsArr[i].items, listDate: listsArr[i].listDate });
+          break;
+        }
+      }
     }
   });
 };
 
 exports.updateItem = (req, res) => {
-  Item.updateOne(
-    { _id: req.params.id },
-    { items: req.body.items },
-    (err, data) => {
-      if (err) {
-        res.status(400).send({
-          ErrorMessage: "Error occured while updating item: Item not added",
-        });
-      } else {
-        res.status(200).send({
-          documentsMatched: data.nModified,
-          documentsModified: data.nModified,
-        });
+  Item.find({ _id: req.params.userId }, (err, data) => {
+    if (err) {
+      res.status(400).send({
+        items: [],
+        listDate: "",
+        ErrorMessage: "Erro occured while retrieving record from database",
+      });
+    } else {
+
+      for (let i = 0; i < data[0].lists.length; i++) {
+        if (data[0].lists[i]._id == req.params.listId) {
+          data[0].lists[i].items = req.body.items;
+          break;
+        }
       }
+
+      Item.updateOne(
+        { _id: req.params.userId },
+        { lists: data[0].lists },
+        (err, updateStatus) => {
+          if (err) {
+            res.status(400).send({
+              ErrorMessage: "Error occured while updating item: Item(s) not added",
+              documentsMatched: 0,
+              documentsModified: 0,
+            });
+          } else {
+            res.status(200).send({
+              documentsMatched: updateStatus.nModified,
+              documentsModified: updateStatus.nModified,
+            });
+          }
+        }
+      );
     }
-  );
+  });
 };
 
 exports.addNewItemsList = (req, res) => {
@@ -88,24 +120,33 @@ exports.addNewItemsList = (req, res) => {
 
       let newListObj = {
         listDate: req.body.dates,
-        items: req.body.items
-      }
+        items: req.body.items,
+      };
 
       userItemsArray.push(newListObj);
 
-      Item.updateOne(
+      Item.findOneAndUpdate(
         { userName: req.body.userId },
         { lists: userItemsArray },
         (err, data) => {
           if (err) {
             res.status(400).send({
+              data: "",
               ErrorMessage: "Error occured while updating item: Item not added",
             });
           } else {
-            res.status(200).send({
-              data: data,
-              documentsMatched: data.nModified,
-              documentsModified: data.nModified,
+            // return _id of newly added list
+            Item.find({ _id: data._id }, (err, data) => {
+              if (err) {
+                res.status(400).send({
+                  ErrorMessage:
+                    "Error occured while finding item: Item not found",
+                });
+              } else {
+                res.status(200).send({
+                  data: data[0].lists[data[0].lists.length - 1],
+                });
+              }
             });
           }
         }

@@ -5,11 +5,11 @@ exports.addUserProfile = (app) => {
 }
 
 exports.itemsGetById = (app) => {
-    app.get('/item/:id', items.oldItemsById);
+    app.get('/item/:userId/:listId', items.oldItemsById);
 }
 
 exports.itemsUpdate = (app) => {
-    app.put('/items/month/:id', items.updateItem);
+    app.put('/items/month/:userId/:listId', items.updateItem);
 }
 
 exports.getUserItems = (app) => {
