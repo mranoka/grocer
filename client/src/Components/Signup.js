@@ -98,16 +98,16 @@ export default class Signup extends React.Component {
 
     return (
       <div>
-        <Row>
+        <Row id='sign-up-icon'>
           <Col>
             <span onClick={this.handleToHome}>
-              <BsPersonCircle size={30} />
+              <BsPersonCircle size={150} />
             </span>
             <br />
-            <span>Sign Up</span>
+            <span id="sign-up-label">Sign Up</span>
           </Col>
         </Row>
-        <Row>
+        <Row id='credentials-container'>
           <Form onSubmit={this.handleSubmit}>
             <Form.Group className="mb-3">
               <Form.Label>Email address</Form.Label>

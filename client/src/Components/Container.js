@@ -8,7 +8,7 @@ import fetch from "isomorphic-fetch";
 import Modal from "react-bootstrap/Modal";
 import "../index.css";
 
-const abortController = new AbortController();
+// const abortController = new AbortController();
 
 export default class FieldContainer extends React.Component {
   constructor(props) {
@@ -58,7 +58,7 @@ export default class FieldContainer extends React.Component {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        userId: "mahamo.ranoka@gmail.com",
+        userId: JSON.parse(sessionStorage.getItem("user")).user,
         dates: sessionStorage.getItem("dates"),
         items: [],
       }),

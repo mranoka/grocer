@@ -142,7 +142,6 @@
     height: 50vh;
     overflow-y: scroll;
     overflow-x: hidden;
-    
   }
 
   .serious-container-big {
@@ -200,6 +199,63 @@
     margin-top: 20px;
   }
 
+  .show-error-message {
+    display: none;
+  }
+
+  /* login page begin */
+  #login-icon-row {
+    margin: auto;
+    margin-top: 10%;
+    width: 50%;
+    text-align: center;
+  }
+
+  #login-label {
+    position: relative;
+    top: 10px;
+    font-size: 30px;
+  }
+
+  #login-container {
+    position: relative;
+    top: 20px;
+    font-weight: 600;
+  }
+
+  #sign-up-prompt {
+    margin: auto;
+    width: 50%;
+    text-align: center;
+  }
+
+  /* login page end */
+
+
+
+
+  /* sign up page begin */
+  #sign-up-icon {
+    margin: auto;
+    margin-top: 10%;
+    width: 50%;
+    text-align: center;
+  }
+
+  #sign-up-label {
+    position: relative;
+    top: 10px;
+    font-size: 30px;
+  }
+
+  #credentials-container {
+    position: relative;
+    top: 20px;
+    font-weight: 600;
+  }
+
+
+  /* sign up page end */
 }
 
 @media screen and (min-width: 581px) {

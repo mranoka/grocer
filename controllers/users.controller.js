@@ -1,14 +1,13 @@
 const mongoose = require("mongoose");
 const User = require("../models/users.model");
 const crypto = require("crypto");
+const KEY = "mayTheForceBeWithYouTheySaid";
+const HASH_ALGORITHM_TO_USE = crypto.getHashes()[4];
 mongoose.set("useFindAndModify", false);
 
 exports.newUser = (req, res) => {
-  let hashAlgorithmToUse = crypto.getHashes()[4];
-  const secret = "mayTheForceBeWithYouTheySaid";
-
   const passwordHash = crypto
-    .createHash(hashAlgorithmToUse, secret)
+    .createHash(HASH_ALGORITHM_TO_USE, KEY)
     // updating data
     .update(req.body.passWord)
     // Encoding to be used
@@ -40,6 +39,30 @@ exports.retrieveAllUsers = (req, res) => {
       });
     } else {
       res.status(200).send({ users: data });
+    }
+  });
+};
+
+exports.authenticateUser = (req, res) => {
+  User.find({ userName: req.body.userID }, (err, data) => {
+    if (err) {
+      res.status(400).send({
+        ErrorMessage: "Error occured while retrieving records from database",
+      });
+    } else {
+      const passwordHash = crypto
+        .createHash(HASH_ALGORITHM_TO_USE, KEY)
+        // updating data
+        .update(req.body.passWord)
+        // Encoding to be used
+        .digest("hex");
+
+      if (data[0] && data[0].password === passwordHash) {
+        console.log(req.body.userID + req.body.passWord);
+        res.status(200).send({ authStatus: true });
+      } else {
+        res.status(200).send({ authStatus: false });
+      }
     }
   });
 };

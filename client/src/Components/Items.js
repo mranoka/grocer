@@ -35,15 +35,20 @@ export default class Items extends React.Component {
   componentDidMount() {}
 
   updateList(newArray) {
-    fetch(`/items/month/${sessionStorage.getItem("userID")}/${sessionStorage.getItem("listID")}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        items: [...newArray],
-      }),
-    })
+    fetch(
+      `/items/month/${sessionStorage.getItem(
+        "userID"
+      )}/${sessionStorage.getItem("listID")}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          items: [...newArray],
+        }),
+      }
+    )
       .then((res) => res.json())
       .then(
         (response) => {
@@ -55,9 +60,9 @@ export default class Items extends React.Component {
       );
   }
 
-  itemRemover(itemArray, item) {
+  itemRemover(itemArray, itemId) {
     itemArray.forEach((element) => {
-      if (element.itemName.includes(item)) {
+      if (element.uuid === itemId) {
         const index = itemArray.indexOf(element);
         itemArray.splice(index, 1);
       }
@@ -125,11 +130,9 @@ export default class Items extends React.Component {
   }
 
   handleQuantityChange(event) {
-    console.log(event.target.id);
     this.props.items.forEach((item, index) => {
       if (event.target.id === item.uuid) {
         item.quantity = event.target.value;
-        console.log(item.itemName);
       }
     });
     sessionStorage.setItem("items", JSON.stringify(this.props.items));
@@ -207,7 +210,7 @@ export default class Items extends React.Component {
             <button
               className="btn btn-danger"
               onClick={this.handleDelete}
-              value={item.itemName}
+              value={item.uuid}
             >
               &times;
             </button>

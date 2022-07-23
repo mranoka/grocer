@@ -19,7 +19,3 @@ exports.getUserItems = (app) => {
 exports.deleteItem = (app) => {
     app.delete('/item', items.deleteItem)
 }
-
-exports.addListItems = (app) => {
-    app.put("/new/list", items.addNewItemsList)
-}

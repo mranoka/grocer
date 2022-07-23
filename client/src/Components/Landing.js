@@ -34,6 +34,7 @@ export default class Landing extends React.Component {
       `${this.state.startDate} - ${this.state.endDate}`
     );
     sessionStorage.setItem("sentinel", `666`);
+
     this.setState({
       redirect: "/container",
     });
@@ -96,7 +97,7 @@ export default class Landing extends React.Component {
   }
 
   componentDidMount() {
-    this.fetchUserData("mahamo.ranoka@gmail.com");
+    this.fetchUserData(JSON.parse(sessionStorage.getItem("user")).user);
   }
 
   render() {
