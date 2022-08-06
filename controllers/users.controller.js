@@ -23,6 +23,7 @@ exports.newUser = (req, res) => {
   newUserProfile.save((err, data) => {
     if (err) {
       res.status(400).send({
+        data: "",
         ErrorMessage: `Error occured while adding user to database: user not added. Info: ${err}`,
       });
     } else {
@@ -35,6 +36,7 @@ exports.retrieveAllUsers = (req, res) => {
   User.find({}, (err, data) => {
     if (err) {
       res.status(400).send({
+        users: "",
         ErrorMessage: "Error occured while retrieving records from database",
       });
     } else {
@@ -47,6 +49,7 @@ exports.authenticateUser = (req, res) => {
   User.find({ userName: req.body.userID }, (err, data) => {
     if (err) {
       res.status(400).send({
+        authStatus: false,
         ErrorMessage: "Error occured while retrieving records from database",
       });
     } else {
@@ -58,7 +61,6 @@ exports.authenticateUser = (req, res) => {
         .digest("hex");
 
       if (data[0] && data[0].password === passwordHash) {
-        console.log(req.body.userID + req.body.passWord);
         res.status(200).send({ authStatus: true });
       } else {
         res.status(200).send({ authStatus: false });

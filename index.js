@@ -18,6 +18,7 @@ require('./routes/items.routes').itemsGetById(app);
 require('./routes/items.routes').itemsUpdate(app);
 require('./routes/items.routes').getUserItems(app);
 require('./routes/items.routes').deleteItem(app);
+require('./routes/items.routes').addNewUserList(app);
 require('./routes/users.routes').addNewUser(app);
 require('./routes/users.routes').getAllUsers(app);
 require('./routes/users.routes').authenticateUser(app);

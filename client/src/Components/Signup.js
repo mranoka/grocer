@@ -14,7 +14,9 @@ export default class Signup extends React.Component {
       username: "",
       password: "",
       signUpDate: "",
-      redirect: null
+      userID: "",
+      isDuplicateUser: false,
+      redirect: null,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -25,13 +27,11 @@ export default class Signup extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     if (this.state.username && this.state.password) {
-      this.saveNewUser(this.state.username, this.state.password);
+      // this.saveNewUser(this.state.username, this.state.password);
 
       this.startNewUserProfile(this.state.username, this.state.password);
-      
-      this.setState({
-        redirect: "/"
-      })
+    } else {
+      return;
     }
   }
 
@@ -45,13 +45,23 @@ export default class Signup extends React.Component {
         userName: userName,
         passWord: passPhrase,
         isPrivileged: false,
-        itemLists: []
+        itemLists: [],
       }),
     })
       .then((res) => res.json())
       .then(
         (response) => {
-          console.log(response);
+          if (response.data) {
+            this.saveNewUser(userName, passPhrase);
+
+            this.setState({
+              redirect: "/",
+            });
+          } else {
+            this.setState({
+              isDuplicateUser: true,
+            });
+          }
         },
         (err) => console.log(err)
       );
@@ -72,7 +82,9 @@ export default class Signup extends React.Component {
       .then((res) => res.json())
       .then(
         (response) => {
-          console.log(response);
+          this.setState({
+            userID: response.data,
+          });
         },
         (err) => console.log(err)
       );
@@ -91,23 +103,22 @@ export default class Signup extends React.Component {
   }
 
   render() {
-
     if (this.state.redirect) {
       return <Redirect to={this.state.redirect} />;
     }
 
     return (
       <div>
-        <Row id='sign-up-icon'>
+        <Row id="sign-up-icon-container">
           <Col>
-            <span onClick={this.handleToHome}>
+            <span id="sign-up-icon" onClick={this.handleToHome}>
               <BsPersonCircle size={150} />
             </span>
             <br />
             <span id="sign-up-label">Sign Up</span>
           </Col>
         </Row>
-        <Row id='credentials-container'>
+        <Row id="credentials-container">
           <Form onSubmit={this.handleSubmit}>
             <Form.Group className="mb-3">
               <Form.Label>Email address</Form.Label>
@@ -133,6 +144,15 @@ export default class Signup extends React.Component {
               Sign Up
             </Button>
           </Form>
+          {/* message if user already exists */}
+          {this.state.isDuplicateUser ? (
+            <span>
+              Email Address Is Already In Use. <br />
+              Please Use A Different Email Address To Sign Up
+            </span>
+          ) : (
+            ""
+          )}
         </Row>
       </div>
     );

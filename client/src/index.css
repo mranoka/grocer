@@ -215,6 +215,7 @@
     position: relative;
     top: 10px;
     font-size: 30px;
+    font-weight: 600;
   }
 
   #login-container {
@@ -236,6 +237,10 @@
 
   /* sign up page begin */
   #sign-up-icon {
+    color:#2e2eb8;
+  }
+
+  #sign-up-icon-container{
     margin: auto;
     margin-top: 10%;
     width: 50%;
@@ -246,6 +251,8 @@
     position: relative;
     top: 10px;
     font-size: 30px;
+    font-weight: 600;
+    color:#2e2eb8;
   }
 
   #credentials-container {

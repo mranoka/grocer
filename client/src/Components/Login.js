@@ -47,7 +47,6 @@ export default class Login extends React.Component {
               redirect: "/"
             })
             } else {
-              console.log("hrer")
               sessionStorage.removeItem("user");
               
               this.setState({

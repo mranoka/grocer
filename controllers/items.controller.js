@@ -4,32 +4,45 @@ mongoose.set("useFindAndModify", false);
 const crypto = require("crypto");
 
 exports.addNewUserProfile = (req, res) => {
-  let hashAlgorithmToUse = crypto.getHashes()[4];
-  const secret = "mayTheForceBeWithYouTheySaid";
-
-  const passwordHash = crypto
-    .createHash(hashAlgorithmToUse, secret)
-    // updating data
-    .update(req.body.passWord)
-    // Encoding to be used
-    .digest("hex");
-
-  // create new user profile and persist to database
-  const newItem = new Item({
-    userName: req.body.userName,
-    password: passwordHash,
-    isAdmin: req.body.isPrivileged,
-    lists: req.body.itemLists,
-  });
-
-  newItem.save((err, data) => {
+  Item.find({ userName: req.body.userName }, (err, data) => {
     if (err) {
       res.status(400).send({
         data: "",
-        ErrorMessage: `Error occured while adding item to database: Item not added. Info: ${err}`,
+        ErrorMessage: "Error occured while retrieving records from database",
       });
     } else {
-      res.status(200).send({ data: data._id });
+      if (data.length > 0) {
+        res.status(200).send({ data: "" });
+      } else {
+        let hashAlgorithmToUse = crypto.getHashes()[4];
+        const secret = "mayTheForceBeWithYouTheySaid";
+
+        const passwordHash = crypto
+          .createHash(hashAlgorithmToUse, secret)
+          // updating data
+          .update(req.body.passWord)
+          // Encoding to be used
+          .digest("hex");
+
+        // create new user profile and persist to database
+        const newItem = new Item({
+          userName: req.body.userName,
+          password: passwordHash,
+          isAdmin: req.body.isPrivileged,
+          lists: req.body.itemLists,
+        });
+
+        newItem.save((err, data) => {
+          if (err) {
+            res.status(400).send({
+              data: "",
+              ErrorMessage: `Error occured while adding item to database: Item not added. Info: ${err}`,
+            });
+          } else {
+            res.status(200).send({ data: data._id });
+          }
+        });
+      }
     }
   });
 };
@@ -38,6 +51,8 @@ exports.getAllUserLists = (req, res) => {
   Item.find({ userName: req.params.userId }, (err, data) => {
     if (err) {
       res.status(400).send({
+        lists: "",
+        userId: "",
         ErrorMessage: "Error occured while retrieving records from database",
       });
     } else {
@@ -78,7 +93,6 @@ exports.updateItem = (req, res) => {
         ErrorMessage: "Erro occured while retrieving record from database",
       });
     } else {
-
       for (let i = 0; i < data[0].lists.length; i++) {
         if (data[0].lists[i]._id == req.params.listId) {
           data[0].lists[i].items = req.body.items;
@@ -92,7 +106,8 @@ exports.updateItem = (req, res) => {
         (err, updateStatus) => {
           if (err) {
             res.status(400).send({
-              ErrorMessage: "Error occured while updating item: Item(s) not added",
+              ErrorMessage:
+                "Error occured while updating item: Item(s) not added",
               documentsMatched: 0,
               documentsModified: 0,
             });
@@ -113,7 +128,11 @@ exports.addNewItemsList = (req, res) => {
 
   Item.find({ userName: req.body.userId }, (err, data) => {
     if (err) {
-      return;
+      res.status(400).send({
+        ErrorMessage:
+          "Error occured while updating item: Item(s) not added",
+        data: "",
+      });
     } else {
       // retrieve all user's item lists
       if (data[0].lists.length > 0) userItemsArray = data[0].lists;
@@ -139,6 +158,7 @@ exports.addNewItemsList = (req, res) => {
             Item.find({ _id: data._id }, (err, data) => {
               if (err) {
                 res.status(400).send({
+                  data: "",
                   ErrorMessage:
                     "Error occured while finding item: Item not found",
                 });

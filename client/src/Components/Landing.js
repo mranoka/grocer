@@ -28,11 +28,12 @@ export default class Landing extends React.Component {
 
   handleDateSelect(event) {
     event.preventDefault();
-    sessionStorage.removeItem("items");
+    sessionStorage.removeItem("items")
     sessionStorage.setItem(
       "dates",
       `${this.state.startDate} - ${this.state.endDate}`
     );
+    
     sessionStorage.setItem("sentinel", `666`);
 
     this.setState({

@@ -4,6 +4,10 @@ exports.addUserProfile = (app) => {
     app.post('/new/userprofile', items.addNewUserProfile);
 }
 
+exports.addNewUserList = (app) => {
+    app.put('/new/list', items.addNewItemsList);
+}
+
 exports.itemsGetById = (app) => {
     app.get('/item/:userId/:listId', items.oldItemsById);
 }

@@ -32,10 +32,9 @@ function App() {
         >
           <Switch>
             <GuardedRoute path="/login" exact component={Login} />
-            <GuardedRoute path="/" exact component={Login} />
             <GuardedRoute path="/signup" exact component={Signup} />
             <GuardedRoute
-              path="/landing"
+              path="/"
               exact
               component={Landing}
               meta={{ requiresAuth: true }}
