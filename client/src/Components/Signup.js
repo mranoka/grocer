@@ -5,6 +5,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { BsPersonCircle } from "react-icons/bs";
 import { Redirect } from "react-router-dom";
+import { BsFillArrowLeftCircleFill } from "react-icons/bs";
 
 export default class Signup extends React.Component {
   constructor(props) {
@@ -22,6 +23,14 @@ export default class Signup extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handlePasswordEntry = this.handlePasswordEntry.bind(this);
     this.handleUsernameEntry = this.handleUsernameEntry.bind(this);
+    this.handleToLogin = this.handleToLogin.bind(this);
+
+  }
+
+  handleToLogin() {
+    this.setState({
+      redirect: "/login"
+    })
   }
 
   handleSubmit(e) {
@@ -109,6 +118,13 @@ export default class Signup extends React.Component {
 
     return (
       <div>
+        <Row id="to-login-button">
+          <Col>
+            <span onClick={this.handleToLogin}>
+              <BsFillArrowLeftCircleFill size={30} />
+            </span>
+          </Col>
+        </Row>
         <Row id="sign-up-icon-container">
           <Col>
             <span id="sign-up-icon" onClick={this.handleToHome}>
@@ -146,7 +162,7 @@ export default class Signup extends React.Component {
           </Form>
           {/* message if user already exists */}
           {this.state.isDuplicateUser ? (
-            <span>
+            <span id="duplicate-user-warning">
               Email Address Is Already In Use. <br />
               Please Use A Different Email Address To Sign Up
             </span>

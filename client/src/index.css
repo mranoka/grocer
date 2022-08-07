@@ -17,9 +17,34 @@
   #landing-container {
     margin: 0;
     position: absolute;
-    top: 30%;
+    top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
+    overflow-x: hidden;
+  }
+
+  #landing-header {
+    position: relative;
+    overflow-x: auto;
+  }
+
+  #hamburger-menu {
+    margin-top: 2%;
+  }
+
+  #application-logo-container {
+    margin-top: 45%;
+    width: 100vw;
+  }
+
+  #application-logo {
+    height: 350px;
+    width: 400px;
+  }
+
+  #welcome-div {
+    margin-left: 32%;
+    font-size: 25px;
   }
 
   #new-list-button {
@@ -261,9 +286,28 @@
     font-weight: 600;
   }
 
+  #duplicate-user-warning {
+    margin-top: 20px;
+    color: ff0000;
+  }
+
+  #to-login-button {
+    margin-top: 20px;
+  }
 
   /* sign up page end */
 }
 
 @media screen and (min-width: 581px) {
+  /* App component start */
+  #main-container {
+    width: 412px;
+    height: 915px;
+  }
+  /* App component end */
+
+
+  /* landing page start */
+  /* landing page end */
+
 }
