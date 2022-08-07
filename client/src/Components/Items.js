@@ -2,6 +2,8 @@ import React from "react";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/Col";
 import "../index.css";
+import { BsFillArrowUpCircleFill } from "react-icons/bs";
+import { BsArrowDownCircleFill } from "react-icons/bs";
 
 export default class Items extends React.Component {
   constructor(props) {
@@ -14,6 +16,10 @@ export default class Items extends React.Component {
       priceSet: "",
       totalSentinel: false,
       priceCheck: false,
+      showExpander: false,
+      showShrinker: false,
+      isExpanded: false,
+      expandSentinel: false,
     };
 
     this.handleDelete = this.handleDelete.bind(this);
@@ -21,20 +27,28 @@ export default class Items extends React.Component {
     this.handlePriceChange = this.handlePriceChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleQuantityChange = this.handleQuantityChange.bind(this);
+    this.showDiveEnlarger = this.showDiveEnlarger.bind(this);
+    this.handleItemDisplayExpand = this.handleItemDisplayExpand.bind(this);
+    this.handleItemDisplayShrink = this.handleItemDisplayShrink.bind(this);
   }
 
   componentDidMount() {}
 
   updateList(newArray) {
-    fetch(`/items/month/${sessionStorage.getItem("listID")}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        items: [...newArray],
-      }),
-    })
+    fetch(
+      `/items/month/${sessionStorage.getItem(
+        "userID"
+      )}/${sessionStorage.getItem("listID")}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          items: [...newArray],
+        }),
+      }
+    )
       .then((res) => res.json())
       .then(
         (response) => {
@@ -46,9 +60,9 @@ export default class Items extends React.Component {
       );
   }
 
-  itemRemover(itemArray, item) {
+  itemRemover(itemArray, itemId) {
     itemArray.forEach((element) => {
-      if (element.itemName.includes(item)) {
+      if (element.uuid === itemId) {
         const index = itemArray.indexOf(element);
         itemArray.splice(index, 1);
       }
@@ -86,8 +100,6 @@ export default class Items extends React.Component {
     });
     sessionStorage.setItem("items", JSON.stringify(this.props.items));
 
-   // console.log(JSON.parse(sessionStorage.getItem("items")))
-
     if (!this.state.totalSentinel)
       this.setState({
         totalSentinel: true,
@@ -100,13 +112,12 @@ export default class Items extends React.Component {
     let total = 0;
 
     if (JSON.parse(sessionStorage.getItem("items")))
-      holderArray = [...JSON.parse(sessionStorage.getItem("items"))]; 
+      holderArray = [...JSON.parse(sessionStorage.getItem("items"))];
     // get items total
     holderArray.forEach((item) => {
       if (item.price) {
         total += parseInt(item.price) * parseInt(item.quantity);
       }
-      
     });
 
     this.setState({
@@ -119,11 +130,9 @@ export default class Items extends React.Component {
   }
 
   handleQuantityChange(event) {
-    console.log(event.target.id)
     this.props.items.forEach((item, index) => {
-      if (event.target.id=== item.uuid) {
+      if (event.target.id === item.uuid) {
         item.quantity = event.target.value;
-        console.log(item.itemName)
       }
     });
     sessionStorage.setItem("items", JSON.stringify(this.props.items));
@@ -134,10 +143,48 @@ export default class Items extends React.Component {
       });
   }
 
+  showDiveEnlarger() {
+    if (this.state.isExpanded) {
+      this.setState({
+        showShrinker: true,
+      });
+
+      setTimeout(() => {
+        this.setState({
+          showShrinker: false,
+        });
+      }, 5000);
+    } else {
+      this.setState({
+        showExpander: true,
+      });
+
+      setTimeout(() => {
+        this.setState({
+          showExpander: false,
+        });
+      }, 5000);
+    }
+  }
+
+  handleItemDisplayExpand() {
+    this.setState({
+      isExpanded: true,
+      showExpander: false,
+    });
+  }
+
+  handleItemDisplayShrink() {
+    this.setState({
+      isExpanded: false,
+      showShrinker: false,
+    });
+  }
+
   orderByCategory(itemsArray) {
     // avoid breaking app on initial load due to empty itemsArray
     if (itemsArray === null) {
-      return
+      return;
     }
     let dryArray = [];
     let wetArray = [];
@@ -163,7 +210,7 @@ export default class Items extends React.Component {
             <button
               className="btn btn-danger"
               onClick={this.handleDelete}
-              value={item.itemName}
+              value={item.uuid}
             >
               &times;
             </button>
@@ -226,8 +273,35 @@ export default class Items extends React.Component {
           </Col>
           <hr id="line-two" />
         </Row>
-
-        <div id="serious-container">{itemsList}</div>
+        <div
+          id="serious-container"
+          onScroll={this.showDiveEnlarger}
+          className={
+            this.state.isExpanded
+              ? "serious-container-big"
+              : "serious-container-small"
+          }
+        >
+          <div
+            id="scroll-pane-expander"
+            onClick={this.handleItemDisplayExpand}
+            className={this.state.showExpander ? "" : "show-expander"}
+          >
+            <span>
+              <BsFillArrowUpCircleFill size={100} color="blue" />
+            </span>
+          </div>
+          <div
+            id="scroll-pane-shrinker"
+            onClick={this.handleItemDisplayShrink}
+            className={this.state.showShrinker ? "" : "show-shrinker"}
+          >
+            <span id="shrink">
+              <BsArrowDownCircleFill size={100} color="blue" />
+            </span>
+          </div>
+          <div>{itemsList}</div>
+        </div>
       </form>
     );
   }

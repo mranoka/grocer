@@ -2,3 +2,4 @@
 - Metrics *
 - Hamburger menu on landing page
 - show display month names for list titles
+- change database schema to include users 

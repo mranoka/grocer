@@ -8,6 +8,8 @@ import fetch from "isomorphic-fetch";
 import Modal from "react-bootstrap/Modal";
 import "../index.css";
 
+// const abortController = new AbortController();
+
 export default class FieldContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -49,21 +51,40 @@ export default class FieldContainer extends React.Component {
       );
   }
 
-  updateList() {
-    fetch(
-      `/items/month/${
-        this.state.listID ? this.state.listID : sessionStorage.getItem("listID")
-      }`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
+  startNewItemsList() {
+    fetch("/new/list", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: JSON.parse(sessionStorage.getItem("user")).user,
+        dates: sessionStorage.getItem("dates"),
+        items: [],
+      }),
+    })
+      .then((res) => res.json())
+      .then(
+        (response) => {
+          this.setState({
+            listID: response.data._id,
+          });
+          sessionStorage.setItem("listID", `${response.data._id}`);
         },
-        body: JSON?.stringify({
-          items: [...JSON?.parse(sessionStorage.getItem("items"))],
-        }),
-      }
-    )
+        (err) => console.log(err)
+      );
+  }
+
+  updateList() {
+    fetch(`/items/month/${sessionStorage.getItem("userID")}/${sessionStorage.getItem("listID")}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON?.stringify({
+        items: [...JSON?.parse(sessionStorage.getItem("items"))],
+      }),
+    })
       .then((res) => res.json())
       .then(
         (response) => {
@@ -76,17 +97,18 @@ export default class FieldContainer extends React.Component {
   }
 
   fetchData() {
-    fetch(`/item/${sessionStorage.getItem("listID")}`)
+    fetch(
+      `/item/${sessionStorage.getItem("userID")}/${sessionStorage.getItem(
+        "listID"
+      )}`
+    )
       .then((res) => res.json())
       .then(
         (response) => {
-          sessionStorage.setItem(
-            "items",
-            JSON.stringify(response.item[0].items)
-          );
+          sessionStorage.setItem("items", JSON.stringify(response.items));
           this.setState({
-            savedItemsArray: response.item[0].items,
-            dates: response.item[0].listDate,
+            savedItemsArray: response.items,
+            dates: response.listDate,
           });
         },
         (err) => console.log(err)
@@ -101,13 +123,24 @@ export default class FieldContainer extends React.Component {
     });
 
     if (sessionStorage.getItem("sentinel") === "666") {
-      this.startList();
+      this.startNewItemsList();
       sessionStorage.setItem("sentinel", `661`);
     }
 
     if (sessionStorage.getItem("mode") === "0") {
       this.fetchData();
     }
+
+    window.addEventListener("beforeunload", () => {
+      this.updateList();
+    }); // saves everything when user reloads
+  }
+
+  componentWillUnmount() {
+    // window.removeEventListener("beforeunload", this.updateList()); // remove the event handler for normal unmounting
+    // abortController.abort(); // eliminate subscriptions to asynchronous
+    // functions to avoid calling setState()
+    // on unmounted components
   }
 
   handleClose() {

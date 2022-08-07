@@ -1,19 +1,23 @@
 const items = require("../controllers/items.controller");
 
-exports.itemsAdd = (app) => {
-    app.post('/new/item', items.newItems);
+exports.addUserProfile = (app) => {
+    app.post('/new/userprofile', items.addNewUserProfile);
+}
+
+exports.addNewUserList = (app) => {
+    app.put('/new/list', items.addNewItemsList);
 }
 
 exports.itemsGetById = (app) => {
-    app.get('/item/:id', items.oldItemsById);
+    app.get('/item/:userId/:listId', items.oldItemsById);
 }
 
 exports.itemsUpdate = (app) => {
-    app.put('/items/month/:id', items.updateItem);
+    app.put('/items/month/:userId/:listId', items.updateItem);
 }
 
-exports.itemsGetAll = (app) => {
-    app.get('/items/all', items.itemsGetAll);
+exports.getUserItems = (app) => {
+    app.get('/items/all/:userId', items.getAllUserLists);
 }
 
 exports.deleteItem = (app) => {

@@ -33,6 +33,32 @@ export default class NewItem extends React.Component {
     }
   }
 
+  updateList(newArray) {
+    fetch(
+      `/items/month/${sessionStorage.getItem(
+        "userID"
+      )}/${sessionStorage.getItem("listID")}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          items: [...newArray],
+        }),
+      }
+    )
+      .then((res) => res.json())
+      .then(
+        (response) => {
+          this.setState({
+            updateResponse: response,
+          });
+        },
+        (err) => console.log(err)
+      );
+  }
+
   handleCategory(event) {
     this.setState({ category: event.target.value });
   }
@@ -56,6 +82,8 @@ export default class NewItem extends React.Component {
 
     holderArray.push(newItem);
 
+    this.updateList(holderArray)
+    
     this.setState((state) => ({
       sentinel: "1",
       itemCount: state.itemCount + 1,

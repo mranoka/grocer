@@ -13,11 +13,15 @@ app.use(cors());
 app.use(express.json()); 
 
 // routes
-require('./routes/items.routes').itemsAdd(app);
+require('./routes/items.routes').addUserProfile(app);
 require('./routes/items.routes').itemsGetById(app);
 require('./routes/items.routes').itemsUpdate(app);
-require('./routes/items.routes').itemsGetAll(app);
+require('./routes/items.routes').getUserItems(app);
 require('./routes/items.routes').deleteItem(app);
+require('./routes/items.routes').addNewUserList(app);
+require('./routes/users.routes').addNewUser(app);
+require('./routes/users.routes').getAllUsers(app);
+require('./routes/users.routes').authenticateUser(app);
 
 // uri for connecting to database from Atlas
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.fojyg.mongodb.net/grocer?retryWrites=true&w=majority`
