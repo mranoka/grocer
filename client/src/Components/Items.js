@@ -208,11 +208,11 @@ export default class Items extends React.Component {
         <Row key={item.uuid + "6"}>
           <Col key={item.uuid + "5"}>
             <button
-              className="btn btn-danger"
+              className="delete-boton"
               onClick={this.handleDelete}
               value={item.uuid}
             >
-              &times;
+              <span className="x-marks-spot">&times;</span>
             </button>
           </Col>
           <Col key={item.uuid + "4"}>
@@ -220,7 +220,7 @@ export default class Items extends React.Component {
               <span className="item-name">{item.itemName}</span>
             </div>
           </Col>
-          <Col key={item.uuid + "3"}>
+          <Col className="div-item-quantity" key={item.uuid + "3"}>
             <input
               className="item-quantity"
               type="number"
@@ -287,8 +287,8 @@ export default class Items extends React.Component {
             onClick={this.handleItemDisplayExpand}
             className={this.state.showExpander ? "" : "show-expander"}
           >
-            <span>
-              <BsFillArrowUpCircleFill size={100} color="blue" />
+            <span id="expand">
+              <BsFillArrowUpCircleFill size={50} color="blue" />
             </span>
           </div>
           <div
@@ -297,10 +297,10 @@ export default class Items extends React.Component {
             className={this.state.showShrinker ? "" : "show-shrinker"}
           >
             <span id="shrink">
-              <BsArrowDownCircleFill size={100} color="blue" />
+              <BsArrowDownCircleFill size={50} color="blue" />
             </span>
           </div>
-          <div>{itemsList}</div>
+          <div id="outer-item-container">{itemsList}</div>
         </div>
       </form>
     );

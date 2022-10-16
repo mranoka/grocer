@@ -1,171 +1,368 @@
-@media screen and (max-width: 580px) {
-  #items-list {
-    margin-top: 20px;
+@media screen and (max-width: 580px) {  
+  .item-checkbox {
+    display: none;
   }
-
-  #main-container-two {
-    overflow-x: hidden;
-  }
-  .landing-text {
-    text-align: center;
-  }
-
-  #old-list-div {
-    text-align: left;
-  }
-
-  #landing-container {
-    margin: 0;
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    overflow-x: hidden;
-  }
-
-  #landing-header {
-    position: relative;
-    overflow-x: auto;
-  }
-
-  #hamburger-menu {
-    margin-top: 2%;
-  }
-
+  
   #application-logo-container {
-    margin-top: 45%;
-    width: 100vw;
+    margin-top: 5%;
+    width: 90vw;
   }
 
   #application-logo {
-    height: 350px;
-    width: 400px;
+    height: 450px;
   }
 
-  #welcome-div {
-    margin-left: 32%;
-    font-size: 25px;
+  #add-boton {
+    width: 95%;
+    margin-left: 10px;
+  }
+  
+  .delete-boton {
+    position: relative;
+    top: -14px;
   }
 
-  #new-list-button {
-    margin-top: 45px;
+  #shrink {
+    position: relative;
+    left: 280px;
+    top: 20px;
+   }
+
+   #expand {
+    position: relative;
+    left: 290px;
+    top: -30px;
+   }
+
+   .serious-container-small {
+    display: flex;
+    flex-direction: column;
   }
 
-  #old-list-div {
-    margin-top: 30px;
-  }
-
-  .item-quantity {
-    width: 30px;
-  }
-  .item-price {
-    width: 60px;
-  }
-
-  .item-description {
-    width: 80px;
+  #outer-item-container {
+    flex: auto;
+    position: relative;
+    top: 120px;
+    overflow-y: scroll;
+    overflow-x: hidden;
   }
 
   .item-container {
-    margin-bottom: 5px;
+    padding-top: 15px;
+    padding-bottom: 7px;
     color: black;
-    padding: 5px;
+    margin-bottom: 5px;
   }
+}
 
-  .item-name {
-    position: relative;
-    top: 6px;
-  }
-  #items-total {
-    position: relative;
-    top: -1px;
-    left: 50px;
-    font-weight: 900;
-    font-size: 25px;
-  }
-  .item-checkbox {
-    position: relative;
-    top: 5px;
-  }
-  .add-boton-div {
-    position: fixed;
-  }
+#items-list {
+  margin-top: 20px;
+}
 
-  #header {
-    position: fixed;
-    margin-top: 15px;
-    margin-left: 10px;
-  }
+#main-container-two {
+  overflow-x: hidden;
+}
+.landing-text {
+  text-align: center;
+}
 
-  .bottom-header-row {
-    position: relative;
-    top: 5px;
-  }
+#old-list-div {
+  text-align: left;
+}
 
-  .cat-icon {
-    font-size: 25px;
-  }
+#landing-container {
+  margin: 0;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  overflow-x: hidden;
+}
 
-  #refrigerated {
-    color: rgb(77, 195, 255);
-    font-weight: 900;
-  }
+#landing-header {
+  position: relative;
+  overflow-x: auto;
+}
 
-  #dry-foods {
-    color: RGB(158, 162, 107);
-    font-weight: 900;
-  }
+#hamburger-menu {
+  margin-top: 2%;
+}
 
-  #household-icon {
-    color: rgb(102, 204, 0);
-    font-weight: 900;
-  }
 
-  #wet-foods {
-    color: rgb(0, 102, 204);
-    font-weight: 900;
-  }
 
-  .strike-red {
-    color: red;
-    text-decoration: line-through;
-  }
+#application-logo {
+  height: 350px;
+  width: 400px;
+}
 
-  .no-strike {
-    color: rgb(68, 204, 0);
-  }
+#welcome-div {
+  margin-left: 32%;
+  font-size: 25px;
+}
 
-  #household {
-    border-radius: 7px;
-    background-color: rgb(102, 204, 0);
-  }
+#new-list-button {
+  margin-top: 45px;
+}
 
-  #frozen {
-    border-radius: 7px;
-    background-color: rgb(77, 195, 255);
-  }
+#old-list-div {
+  margin-top: 30px;
+}
 
-  #wet {
-    border-radius: 7px;
-    background-color: rgb(0, 102, 204);
-  }
+.delete-boton {
+  background-color: transparent;
+  border-style: none;
+  font-weight: 600;
+  font-size: 2.1em;
+  color: red;
+  padding-left: 15px;
+}
 
-  #dry {
-    border-radius: 7px;
-    background-color: RGB(158, 162, 107);
-  }
+.x-marks-spot {
+  text-shadow: 1px 2px 0.5px gainsboro;
+}
 
-  .checked-price {
-    opacity: 0.5;
-  }
+.item-quantity {
+  width: 40px;
+  text-align: center;
+  border-radius: 6px;
+  font-weight: 400;
+  border-style: none;
+  box-shadow: 1px 1px 15px -1px;
+}
 
+.item-price {
+  width: 70px;
+  text-align: center;
+  border-radius: 6px;
+  border-style: none;
+  box-shadow: 1px 1px 10px -1px;
+}
+
+.item-description {
+  width: 80px;
+  text-align: center;
+}
+
+
+.item-name {
+  position: relative;
+}
+#items-total {
+  position: relative;
+  top: -1px;
+  left: 50px;
+  font-weight: 900;
+  font-size: 25px;
+}
+
+.add-boton-div {
+  position: fixed;
+}
+
+#header {
+  position: fixed;
+  margin-top: 15px;
+  margin-left: 10px;
+}
+
+.bottom-header-row {
+  position: relative;
+  top: 5px;
+}
+
+.cat-icon {
+  font-size: 25px;
+}
+
+#refrigerated {
+  color: rgb(77, 195, 255);
+  font-weight: 900;
+}
+
+#dry-foods {
+  color: RGB(158, 162, 107);
+  font-weight: 900;
+}
+
+#household-icon {
+  color: rgb(102, 204, 0);
+  font-weight: 900;
+}
+
+#wet-foods {
+  color: rgb(0, 102, 204);
+  font-weight: 900;
+}
+
+.strike-red {
+  color: red;
+  text-decoration: line-through;
+}
+
+.no-strike {
+  color: rgb(68, 204, 0);
+}
+
+#household {
+  border-radius: 7px;
+  background-color: rgb(102, 204, 0);
+}
+
+#frozen {
+  border-radius: 7px;
+  background-color: rgb(77, 195, 255);
+}
+
+#wet {
+  border-radius: 7px;
+  background-color: rgb(0, 102, 204);
+}
+
+#dry {
+  border-radius: 7px;
+  background-color: RGB(158, 162, 107);
+}
+
+.checked-price {
+  opacity: 0.5;
+}
+
+.show-expander {
+  visibility: hidden;
+}
+
+.show-shrinker {
+  visibility: hidden;
+}
+
+#scroll-pane-expander {
+  position: fixed;
+}
+
+#scroll-pane-shrinker {
+  position: fixed;
+  top: -10px;
+}
+
+.body-row {
+  position: relative;
+  top: 120px;
+}
+
+#add-boton {
+  width: 95%;
+  margin-left: 10px;
+}
+
+#totals-row {
+  position: fixed;
+  top: 175px;
+  width: 250px;
+}
+
+#line-two {
+  margin-top: 10px;
+}
+
+#line-one {
+  margin-top: 10px;
+}
+
+#add-item-div {
+  margin-top: 20px;
+}
+
+.show-error-message {
+  display: none;
+}
+
+/* login page begin */
+#login-icon-row {
+  margin: auto;
+  margin-top: 10%;
+  width: 50%;
+  text-align: center;
+}
+
+#login-label {
+  position: relative;
+  top: 10px;
+  font-size: 30px;
+  font-weight: 600;
+}
+
+#login-container {
+  position: relative;
+  top: 20px;
+  font-weight: 600;
+}
+
+#sign-up-prompt {
+  margin: auto;
+  width: 50%;
+  text-align: center;
+}
+
+/* login page end */
+
+
+/* sign up page begin */
+#sign-up-icon {
+  color:#2e2eb8;
+}
+
+#sign-up-icon-container{
+  margin: auto;
+  margin-top: 10%;
+  width: 50%;
+  text-align: center;
+}
+
+#sign-up-label {
+  position: relative;
+  top: 10px;
+  font-size: 30px;
+  font-weight: 600;
+  color:#2e2eb8;
+}
+
+#credentials-container {
+  position: relative;
+  top: 20px;
+  font-weight: 600;
+}
+
+#duplicate-user-warning {
+  margin-top: 20px;
+  color: ff0000;
+}
+
+#to-login-button {
+  margin-top: 20px;
+}
+
+@media screen and (min-width: 581px) {
+  /* App component start */
+  #main-container {
+    width: 500px;
+    height: 915px;
+  }
+  /* App component end */
+
+
+  /* Items component start */
+  
   .serious-container-small {
-    position: fixed;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #outer-item-container {
+    flex: auto;
+    position: relative;
     top: 120px;
-    margin-top: 150px;
-    width: 95vw;
-    height: 50vh;
-    overflow-y: scroll;
+    width: 450px;
+    padding-right: 10px;
     overflow-x: hidden;
   }
 
@@ -175,139 +372,34 @@
     margin-top: 150px;
     width: 95vw;
     height: 90vh;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
   }
 
-  .show-expander {
-    visibility: hidden;
+  .item-container {
+    padding-top: 15px;
+    padding-bottom: 7px;
+    color: black;
+    margin-bottom: 5px;
   }
+  /* Items component end */
 
-  .show-shrinker {
-    visibility: hidden;
+  /* Container component start */
+  .add-boton-div {
+    width: 400px;
   }
-
-  #scroll-pane-expander {
-    position: fixed;
-  }
-
-  #scroll-pane-shrinker {
-    position: fixed;
-    top: -10px;
-  }
-
-  .body-row {
-    position: relative;
-    top: 120px;
-  }
-
   #add-boton {
-    width: 95%;
-    margin-left: 10px;
+    width: 440px;
   }
 
-  #totals-row {
-    position: fixed;
-    top: 175px;
-    width: 250px;
+  #application-logo {
+    height: 400px;
   }
+  /* Container component end */
 
-  #line-two {
-    margin-top: 10px;
+  /* header component start */
+  .top-header-row, .bottom-header-row {
+    width: 600px;
   }
-
-  #line-one {
-    margin-top: 10px;
-  }
-
-  #add-item-div {
-    margin-top: 20px;
-  }
-
-  .show-error-message {
-    display: none;
-  }
-
-  /* login page begin */
-  #login-icon-row {
-    margin: auto;
-    margin-top: 10%;
-    width: 50%;
-    text-align: center;
-  }
-
-  #login-label {
-    position: relative;
-    top: 10px;
-    font-size: 30px;
-    font-weight: 600;
-  }
-
-  #login-container {
-    position: relative;
-    top: 20px;
-    font-weight: 600;
-  }
-
-  #sign-up-prompt {
-    margin: auto;
-    width: 50%;
-    text-align: center;
-  }
-
-  /* login page end */
-
-
-
-
-  /* sign up page begin */
-  #sign-up-icon {
-    color:#2e2eb8;
-  }
-
-  #sign-up-icon-container{
-    margin: auto;
-    margin-top: 10%;
-    width: 50%;
-    text-align: center;
-  }
-
-  #sign-up-label {
-    position: relative;
-    top: 10px;
-    font-size: 30px;
-    font-weight: 600;
-    color:#2e2eb8;
-  }
-
-  #credentials-container {
-    position: relative;
-    top: 20px;
-    font-weight: 600;
-  }
-
-  #duplicate-user-warning {
-    margin-top: 20px;
-    color: ff0000;
-  }
-
-  #to-login-button {
-    margin-top: 20px;
-  }
-
-  /* sign up page end */
-}
-
-@media screen and (min-width: 581px) {
-  /* App component start */
-  #main-container {
-    width: 412px;
-    height: 915px;
-  }
-  /* App component end */
-
-
-  /* landing page start */
-  /* landing page end */
-
+  /* header component end  */
 }
