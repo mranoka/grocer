@@ -20,6 +20,11 @@
   .delete-boton {
     position: relative;
     top: -14px;
+    margin-right: 5px;
+  }
+
+  .item-price {
+    margin-right: 8px;
   }
 
   #shrink {
@@ -139,9 +144,10 @@
 }
 
 .item-description {
-  margin-left: -42px;
-  width: 145px;
+  margin-left: -36px;
+  width: 140px;
   text-align: center;
+  font-weight: 500;
 }
 
 
