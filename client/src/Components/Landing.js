@@ -7,7 +7,7 @@ import { Redirect } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 import Row from "react-bootstrap/esm/Row";
 // import { BiUserCircle } from "react-icons/bi";
-import logo from "../Images/logo.png"
+import logo from "../Images/logo.png";
 
 export default class Landing extends React.Component {
   constructor(props) {
@@ -19,7 +19,7 @@ export default class Landing extends React.Component {
       startDate: "",
       endDate: "",
       redirect: null,
-      username: ""
+      username: "",
     };
 
     this.handleClose = this.handleClose.bind(this);
@@ -104,16 +104,34 @@ export default class Landing extends React.Component {
     let loggedInUserName = JSON.parse(sessionStorage.getItem("user")).user;
 
     this.setState({
-      username: loggedInUserName.substring(0, loggedInUserName.indexOf("@"))
-    })
+      username: loggedInUserName.substring(0, loggedInUserName.indexOf("@")),
+    });
     this.fetchUserData(JSON.parse(sessionStorage.getItem("user")).user);
+  }
+
+  handleDateFormatting(dateString) {
+    let startDate = dateString.substring(0,10)
+    let endDate = dateString.substring(13)
+    var startDateObj = new Date(startDate);
+    var endDateObj = new Date(endDate);
+
+    var options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+
+    let formattedStartDate = startDateObj.toLocaleDateString("en-GB", options);
+    let formattedEndDate = endDateObj.toLocaleDateString("en-GB", options);
+
+    return `${formattedStartDate} - ${formattedEndDate}`
   }
 
   render() {
     let items = this.state.itemsArray;
     let itemsList = items.map((item) => (
       <option key={item._id} id={item._id + "1568"} value={item._id}>
-        {item.listDate}
+        {this.handleDateFormatting(item.listDate)}
       </option>
     ));
 
@@ -128,14 +146,11 @@ export default class Landing extends React.Component {
             {" "}
             <GiHamburgerMenu size={40} />
           </span>
-          {/* <span>
-      <BiUserCircle size={30} />
-      </span> */}
         </Row>
         <div id="landing-container" className="landing-text">
-        <Row id="application-logo-container">
-          <img id="application-logo" alt="application logo" src={logo} />
-        </Row>
+          <Row id="application-logo-container">
+            <img id="application-logo" alt="application logo" src={logo} />
+          </Row>
           <Row id="welcome-div" className="landing-text">
             WELCOME <br />
             {this.state.username}

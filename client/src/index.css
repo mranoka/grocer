@@ -1,3 +1,13 @@
+@media screen and (max-width: 370px) {  
+  /* .item-description {
+    width: 100px;
+  } */
+
+  .div-item-quantity.col {
+    width: 40px;
+  }
+}
+
 @media screen and (max-width: 580px) {  
   .item-checkbox {
     display: none;
@@ -146,13 +156,14 @@
 .item-description {
   margin-left: -36px;
   width: 140px;
-  text-align: center;
+  text-align: left;
   font-weight: 500;
 }
 
 
 .item-name {
-  position: relative;
+  margin-left: 20px;
+  display: block;
 }
 #items-total {
   position: relative;
@@ -388,6 +399,12 @@
     padding-bottom: 7px;
     color: black;
     margin-bottom: 5px;
+  }
+
+  .delete-boton {
+    position: relative;
+    top: -14px;
+    margin-right: 5px;
   }
   /* Items component end */
 
