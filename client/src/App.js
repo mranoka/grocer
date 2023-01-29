@@ -1,5 +1,5 @@
 import "./index.css";
-import { BrowserRouter as Router, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Navigate } from "react-router-dom";
 import Landing from "./Components/Landing";
 import Login from "./Components/Login";
 import Container from "react-bootstrap/Container";
@@ -31,21 +31,21 @@ function App() {
           error={NotFound}
         >
           <Routes>
-            <GuardedRoute path="/login" exact component={Login} />
-            <GuardedRoute path="/signup" exact component={Signup} />
+            <GuardedRoute path="/login" exact component={<Navigate to={Login} />}/>
+            <GuardedRoute path="/signup" exact component={<Navigate to={Signup} />} />
             <GuardedRoute
               path="/"
               exact
-              component={Landing}
+              component={<Navigate to={Landing} />}
               meta={{ requiresAuth: true }}
             />
             <GuardedRoute
               path="/container"
               exact
-              component={FieldContainer}
+              component={<Navigate to={FieldContainer} />}
               meta={{ requiresAuth: true }}
             />
-            <GuardedRoute path="*" component={NotFound} />
+            <GuardedRoute path="*" component={<Navigate to={NotFound} />} />
           </Routes>
         </GuardProvider>
       </Router>
