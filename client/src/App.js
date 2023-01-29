@@ -1,5 +1,5 @@
 import "./index.css";
-import { BrowserRouter as Router, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Routes } from "react-router-dom";
 import Landing from "./Components/Landing";
 import Login from "./Components/Login";
 import Container from "react-bootstrap/Container";
@@ -30,7 +30,7 @@ function App() {
           loading={Loading}
           error={NotFound}
         >
-          <Switch>
+          <Routes>
             <GuardedRoute path="/login" exact component={Login} />
             <GuardedRoute path="/signup" exact component={Signup} />
             <GuardedRoute
@@ -46,7 +46,7 @@ function App() {
               meta={{ requiresAuth: true }}
             />
             <GuardedRoute path="*" component={NotFound} />
-          </Switch>
+          </Routes>
         </GuardProvider>
       </Router>
     </Container>
