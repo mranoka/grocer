@@ -13,8 +13,4 @@ const isLoggedIn = function () {
   }
 };
 
-// const isLoggedIn = function() {
-// return false;
-// }
-
 export default isLoggedIn;

@@ -6,7 +6,7 @@ import { GiThermometerCold } from "react-icons/gi";
 import { GiDesert } from "react-icons/gi";
 import { FaHandHoldingWater } from "react-icons/fa";
 import { BsFillArrowLeftCircleFill } from "react-icons/bs";
-import { Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import "../index.css";
 
 export default class Header extends React.Component {
@@ -27,7 +27,7 @@ export default class Header extends React.Component {
 
   render() {
     if (this.state.redirect) {
-      return <Redirect to={this.state.redirect} />;
+      return <Navigate to={this.state.redirect} />;
     }
 
     return (
