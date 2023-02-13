@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { BsPersonCircle } from "react-icons/bs";
-import { Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { BsFillArrowLeftCircleFill } from "react-icons/bs";
 
 export default class Signup extends React.Component {
@@ -113,7 +113,7 @@ export default class Signup extends React.Component {
 
   render() {
     if (this.state.redirect) {
-      return <Redirect to={this.state.redirect} />;
+      return <Navigate to={this.state.redirect} />;
     }
 
     return (

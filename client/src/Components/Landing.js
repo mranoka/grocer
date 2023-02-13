@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import fetch from "isomorphic-fetch";
 import Modal from "react-bootstrap/Modal";
-import { Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 import Row from "react-bootstrap/esm/Row";
 // import { BiUserCircle } from "react-icons/bi";
@@ -136,7 +136,7 @@ export default class Landing extends React.Component {
     ));
 
     if (this.state.redirect) {
-      return <Redirect to={this.state.redirect} />;
+      return <Navigate to={this.state.redirect} />;
     }
 
     return (
