@@ -9,7 +9,6 @@ import Modal from "react-bootstrap/Modal";
 import "../index.css";
 
 // const abortController = new AbortController();
-
 export default class FieldContainer extends React.Component {
   constructor(props) {
     super(props);
