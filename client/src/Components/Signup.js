@@ -6,6 +6,7 @@ import Col from "react-bootstrap/Col";
 import { BsPersonCircle } from "react-icons/bs";
 import { Navigate } from "react-router-dom";
 import { BsFillArrowLeftCircleFill } from "react-icons/bs";
+import { FallingLines } from "react-loader-spinner";
 
 export default class Signup extends React.Component {
   constructor(props) {
@@ -18,33 +19,42 @@ export default class Signup extends React.Component {
       userID: "",
       isDuplicateUser: false,
       redirect: null,
+      isLoaderDisplayed: false,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handlePasswordEntry = this.handlePasswordEntry.bind(this);
     this.handleUsernameEntry = this.handleUsernameEntry.bind(this);
     this.handleToLogin = this.handleToLogin.bind(this);
-
   }
 
   handleToLogin() {
     this.setState({
-      redirect: "/login"
-    })
+      redirect: "/login",
+    });
+  }
+
+  startSignUpProgressSpinner() {
+    this.setState({
+      isLoaderDisplayed: true,
+    });
+  }
+
+  stopSignUpProgressSpinner() {
+    this.setState({
+      isLoaderDisplayed: false,
+    });
   }
 
   handleSubmit(e) {
     e.preventDefault();
-    if (this.state.username && this.state.password) {
-      // this.saveNewUser(this.state.username, this.state.password);
-
+    if (this.state.username && this.state.password)
       this.startNewUserProfile(this.state.username, this.state.password);
-    } else {
-      return;
-    }
+    else return;
   }
 
   startNewUserProfile(userName, passPhrase) {
+    this.startSignUpProgressSpinner();
     fetch("/new/userprofile", {
       method: "POST",
       headers: {
@@ -62,14 +72,23 @@ export default class Signup extends React.Component {
         (response) => {
           if (response.data) {
             this.saveNewUser(userName, passPhrase);
-
+            sessionStorage.setItem(
+              "user",
+              JSON.stringify({
+                isLoggedIn: true,
+                user: userName,
+                expiration: new Date().getTime() / 1000 + 12 * 60 * 60,
+              })
+            );
             this.setState({
               redirect: "/",
             });
+            this.stopSignUpProgressSpinner();
           } else {
             this.setState({
               isDuplicateUser: true,
             });
+            this.stopSignUpProgressSpinner();
           }
         },
         (err) => console.log(err)
@@ -159,6 +178,12 @@ export default class Signup extends React.Component {
             <Button variant="primary" type="submit">
               Sign Up
             </Button>
+            <FallingLines
+              color="#0d6efd"
+              width="75"
+              visible={this.state.isLoaderDisplayed}
+              ariaLabel="falling-lines-loading"
+            />
           </Form>
           {/* message if user already exists */}
           {this.state.isDuplicateUser ? (
