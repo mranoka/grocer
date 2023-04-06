@@ -1,16 +1,13 @@
-@media screen and (max-width: 370px) {
-  /* .item-description {
-    width: 100px;
-  } */
-
-  .div-item-quantity.col {
-    width: 40px;
-  }
-}
-
 @media screen and (max-width: 580px) {
-  .item-checkbox {
-    display: none;
+  .items-row {
+    display: grid;
+    grid-template-columns: 1fr 130px 1fr 2fr 1fr;
+    column-gap: 4px;
+  }
+  
+
+  .item-delete-button {
+   width: 60px;
   }
 
   #application-logo-container {
@@ -60,6 +57,7 @@
     top: 120px;
     overflow-y: scroll;
     overflow-x: hidden;
+    z-index: 1000;
   }
 
   .item-container {
@@ -89,6 +87,12 @@
     overflow-x: hidden;
   }
   /* error page end */
+
+}
+
+.item-checkbox {
+  position: relative;
+  top: 4px;
 }
 
 #items-list {
@@ -169,6 +173,8 @@
   text-align: center;
   border-radius: 6px;
   border-style: none;
+  -webkit-box-shadow: 1px 1px 10px -1px;
+  -moz-box-shadow: 1px 1px 10px -1px;
   box-shadow: 1px 1px 10px -1px;
 }
 
@@ -199,11 +205,6 @@
   position: fixed;
   margin-top: 15px;
   margin-left: 10px;
-}
-
-.bottom-header-row {
-  position: relative;
-  top: 5px;
 }
 
 .cat-icon {
@@ -382,6 +383,16 @@
 /* sign up page end  */
 
 @media screen and (min-width: 581px) {
+  .items-row {
+    display: grid;
+    grid-template-columns: 2fr 130px 1fr 2fr 1fr;
+    column-gap: 4px;
+  }
+
+  .item-checkbox {
+    position: relative;
+    top: -2px;
+  }
   /* App component start */
   #main-container {
     width: 500px;
