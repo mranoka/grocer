@@ -205,8 +205,8 @@ export default class Items extends React.Component {
     let orderedArray = this.orderByCategory(this.props.items);
     const itemsList = orderedArray?.map((item, index) => (
       <div id={item.category} className="item-container" key={item.uuid}>
-        <Row key={item.uuid + "6"}>
-          <Col key={item.uuid + "5"}>
+        <div key={item.uuid + "6"} className="items-row">
+          <div key={item.uuid + "5"} className="item-delete-button">
             <button
               className="delete-boton"
               onClick={this.handleDelete}
@@ -214,13 +214,13 @@ export default class Items extends React.Component {
             >
               <span className="x-marks-spot">&times;</span>
             </button>
-          </Col>
-          <Col key={item.uuid + "4"}>
+          </div>
+          <div key={item.uuid + "4"}>
             <div className="item-description">
               <span className="item-name">{item.itemName}</span>
             </div>
-          </Col>
-          <Col className="div-item-quantity" key={item.uuid + "3"}>
+          </div>
+          <div className="div-item-quantity" key={item.uuid + "3"}>
             <input
               className="item-quantity"
               type="number"
@@ -230,8 +230,8 @@ export default class Items extends React.Component {
               id={item.uuid}
               onChange={this.handleQuantityChange}
             />
-          </Col>
-          <Col key={item.uuid + "2"}>
+          </div>
+          <div key={item.uuid + "2"}>
             <input
               placeholder={item.price ?? "price"}
               className="item-price"
@@ -240,8 +240,8 @@ export default class Items extends React.Component {
               name="priceSet"
               onChange={this.handlePriceChange}
             />
-          </Col>
-          <Col key={item.uuid + "1"}>
+          </div>
+          <div key={item.uuid + "1"}>
             <input
               className="item-checkbox"
               type="checkbox"
@@ -249,8 +249,8 @@ export default class Items extends React.Component {
               onChange={this.handlePriceCheck}
               name={item.itemName + "priceCheck"}
             />
-          </Col>
-        </Row>
+          </div>
+        </div>
       </div>
     ));
 
