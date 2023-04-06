@@ -6,7 +6,6 @@ import Modal from "react-bootstrap/Modal";
 import { Navigate } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 import Row from "react-bootstrap/esm/Row";
-// import { BiUserCircle } from "react-icons/bi";
 import logo from "../Images/logo.png";
 
 export default class Landing extends React.Component {

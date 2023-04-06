@@ -5,6 +5,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { BsPersonCircle } from "react-icons/bs";
 import { Navigate } from "react-router-dom";
+import { FallingLines } from "react-loader-spinner";
 import "../index.css";
 
 export default class Login extends React.Component {
@@ -15,7 +16,8 @@ export default class Login extends React.Component {
       password: "",
       username: "",
       redirect: null,
-      showAuthError: "show-error-message"
+      showAuthError: "show-error-message",
+      isLoaderDisplayed: false,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -25,8 +27,9 @@ export default class Login extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
+    this.startLoginProgressSpinner();
 
-    if(this.state.password && this.state.username) {
+    if (this.state.password && this.state.username) {
       fetch("/auth/user", {
         method: "POST",
         headers: {
@@ -40,23 +43,32 @@ export default class Login extends React.Component {
         .then((res) => res.json())
         .then(
           (response) => {
-            if(response.authStatus) {
-            sessionStorage.setItem("user", JSON.stringify({isLoggedIn: `${response.authStatus}`,user: this.state.username, expiration: (new Date().getTime() / 1000) + (12 * 60 * 60)}));
-              
-            this.setState({
-              redirect: "/"
-            })
+            this.stopLoginProgressSpinner()
+            if (response.authStatus) {
+              sessionStorage.setItem(
+                "user",
+                JSON.stringify({
+                  isLoggedIn: `${response.authStatus}`,
+                  user: this.state.username,
+                  expiration: new Date().getTime() / 1000 + 12 * 60 * 60,
+                })
+              );
+
+              this.setState({
+                redirect: "/",
+              });
             } else {
               sessionStorage.removeItem("user");
-              
+
               this.setState({
-                showAuthError: ""
-              })
+                showAuthError: "",
+              });
             }
           },
           (err) => console.log(err)
         );
     } else {
+      this.stopLoginProgressSpinner();
       return;
     }
   }
@@ -73,13 +85,25 @@ export default class Login extends React.Component {
     });
   }
 
+  startLoginProgressSpinner() {
+    this.setState({
+      isLoaderDisplayed: true,
+    });
+  }
+
+  stopLoginProgressSpinner() {
+    this.setState({
+      isLoaderDisplayed: false,
+    });
+  }
+
   render() {
     if (this.state.redirect) {
       return <Navigate to={this.state.redirect} />;
     }
     return (
       <div>
-        <Row id='login-icon-row'>
+        <Row id="login-icon-row">
           <Col>
             <span onClick={this.handleToHome}>
               <BsPersonCircle size={150} />
@@ -97,22 +121,30 @@ export default class Login extends React.Component {
                 placeholder="Enter email"
                 onChange={this.handleEmailEntry}
               />
-              <Form.Text className="text-muted">
-                
-              </Form.Text>
+              <Form.Text className="text-muted"></Form.Text>
             </Form.Group>
 
             <Form.Group className="mb-3">
               <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Password"  onChange={this.handlePasswordEntry}/>
+              <Form.Control
+                type="password"
+                placeholder="Password"
+                onChange={this.handlePasswordEntry}
+              />
             </Form.Group>
             <Button variant="dark" type="submit">
               Login
             </Button>
+            <FallingLines
+              color="#000000"
+              width="75"
+              visible={this.state.isLoaderDisplayed}
+              ariaLabel="falling-lines-loading"
+            />
             <div id="sign-up-prompt">
-            Not a user? Sign Up <a href="/signup">Here</a>
+              Not a user? Sign Up <a href="/signup">Here</a>
             </div>
-            <div className={this.state.showAuthError}>
+            <div id="warning-text-wrong-creds" className={this.state.showAuthError}>
               Password & Username Combination Are Invalid. Please Try Again
             </div>
           </Form>
