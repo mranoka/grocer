@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 const Item = require("../models/item.model");
 mongoose.set("useFindAndModify", false);
 const crypto = require("crypto");
+const HASH_ALGORITHM_TO_USE = crypto.getHashes().find(itemName => itemName === "sha256");
+
 
 exports.addNewUserProfile = (req, res) => {
   Item.find({ userName: req.body.userName }, (err, data) => {
@@ -14,11 +16,8 @@ exports.addNewUserProfile = (req, res) => {
       if (data.length > 0) {
         res.status(200).send({ data: "" });
       } else {
-        let hashAlgorithmToUse = crypto.getHashes()[4];
-        const secret = "mayTheForceBeWithYouTheySaid";
-
         const passwordHash = crypto
-          .createHash(hashAlgorithmToUse, secret)
+          .createHash(HASH_ALGORITHM_TO_USE, process.env.KEY)
           // updating data
           .update(req.body.passWord)
           // Encoding to be used
@@ -48,17 +47,31 @@ exports.addNewUserProfile = (req, res) => {
 };
 
 exports.getAllUserLists = (req, res) => {
-  Item.find({ userName: req.params.userId }, (err, data) => {
-    if (err) {
-      res.status(400).send({
-        lists: "",
-        userId: "",
-        ErrorMessage: "Error occured while retrieving records from database",
-      });
-    } else {
-      res.status(200).send({ lists: data[0].lists, userId: data[0]._id });
-    }
-  });
+  let userNameHash = req.headers.authorization.split(",")[0].replace("ElWannabi","");
+  let authHash = req.headers.authorization.split(",")[1];
+
+  let authStatusHash = crypto
+  .createHash(HASH_ALGORITHM_TO_USE, process.env.KEY)
+  // updating data
+  .update(userNameHash + process.env.SALT)
+  // Encoding to be used
+  .digest("hex");
+
+  if(authHash === authStatusHash) {
+    Item.find({ userName: req.params.userId }, (err, data) => {
+      if (err) {
+        res.status(400).send({
+          lists: [],
+          userId: "",
+          ErrorMessage: "Error occured while retrieving records from database",
+        });
+      } else {
+        res.status(200).send({ lists: data[0]?.lists, userId: data[0]._id });
+      }
+    });
+  } else {
+    res.status(200).send({ lists: [], userId: data[0]._id });
+  }
 };
 
 exports.oldItemsById = (req, res) => {
