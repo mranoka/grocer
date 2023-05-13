@@ -7,6 +7,9 @@ import { BsPersonCircle } from "react-icons/bs";
 import { Navigate } from "react-router-dom";
 import { FallingLines } from "react-loader-spinner";
 import "../index.css";
+const crypto = require("crypto");
+
+const HASH_ALGORITHM_TO_USE = crypto.getHashes()[4];
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -25,6 +28,16 @@ export default class Login extends React.Component {
     this.handlePasswordEntry = this.handlePasswordEntry.bind(this);
   }
 
+  // createUserNameHash(userName) {
+  //   return (
+  //     crypto
+  //       .createHash(HASH_ALGORITHM_TO_USE, process.env.KEY)
+  //       // updating data
+  //       .update(userName)
+  //       // Encoding to be used
+  //       .digest("hex")
+  //   );
+  // }
   handleSubmit(e) {
     e.preventDefault();
     this.startLoginProgressSpinner();
@@ -43,12 +56,13 @@ export default class Login extends React.Component {
         .then((res) => res.json())
         .then(
           (response) => {
-            this.stopLoginProgressSpinner()
-            if (response.authStatus) {
+            this.stopLoginProgressSpinner();
+            if (response.authStatus !== "false") {
               sessionStorage.setItem(
                 "user",
                 JSON.stringify({
                   isLoggedIn: `${response.authStatus}`,
+                  userID: `${response.user}`,
                   user: this.state.username,
                   expiration: new Date().getTime() / 1000 + 12 * 60 * 60,
                 })
@@ -144,7 +158,10 @@ export default class Login extends React.Component {
             <div id="sign-up-prompt">
               Not a user? Sign Up <a href="/signup">Here</a>
             </div>
-            <div id="warning-text-wrong-creds" className={this.state.showAuthError}>
+            <div
+              id="warning-text-wrong-creds"
+              className={this.state.showAuthError}
+            >
               Password & Username Combination Are Invalid. Please Try Again
             </div>
           </Form>

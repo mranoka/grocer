@@ -80,7 +80,13 @@ export default class Landing extends React.Component {
   }
 
   fetchUserData(userId) {
-    fetch(`/items/all/${userId}`)
+    console.log(userId)
+    fetch(`/items/all/${userId}`, {
+      method: "GET",
+      headers: {
+        'Authorization': `${JSON.parse(sessionStorage.getItem("user")).userID},${JSON.parse(sessionStorage.getItem("user")).isLoggedIn}`
+      }
+    })
       .then((res) => res.json())
       .then(
         (response) => {

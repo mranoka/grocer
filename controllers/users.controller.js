@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const User = require("../models/users.model");
 const crypto = require("crypto");
-const KEY = "mayTheForceBeWithYouTheySaid";
-const HASH_ALGORITHM_TO_USE = crypto.getHashes()[4];
+const KEY = process.env.KEY;
+const HASH_ALGORITHM_TO_USE = crypto.getHashes().find(itemName => itemName === "sha256");
 mongoose.set("useFindAndModify", false);
 
 exports.newUser = (req, res) => {
@@ -49,21 +49,47 @@ exports.authenticateUser = (req, res) => {
   User.find({ userName: req.body.userID }, (err, data) => {
     if (err) {
       res.status(400).send({
-        authStatus: false,
+        authStatus: "false",
+        user: "",
         ErrorMessage: "Error occured while retrieving records from database",
       });
     } else {
-      const passwordHash = crypto
+      let passwordHash = crypto
         .createHash(HASH_ALGORITHM_TO_USE, KEY)
         // updating data
         .update(req.body.passWord)
         // Encoding to be used
         .digest("hex");
 
+      let userNameHash = crypto
+        .createHash(HASH_ALGORITHM_TO_USE, KEY)
+        // updating data
+        .update(req.body.userID)
+        // Encoding to be used
+        .digest("hex");
+
+      let authStatusHash = crypto
+        .createHash(HASH_ALGORITHM_TO_USE, KEY)
+        // updating data
+        .update(userNameHash + process.env.SALT)
+        // Encoding to be used
+        .digest("hex");
+
+        console.log(passwordHash)
+        console.log(KEY)
+        console.log(userNameHash + process.env.SALT)
+        console.log(authStatusHash)
+        console.log(data[0] && data[0].password)
       if (data[0] && data[0].password === passwordHash) {
-        res.status(200).send({ authStatus: true });
+        res.status(200).send({
+          authStatus: authStatusHash,
+          user: userNameHash + process.env.SALT,
+          ErrorMessage: "",
+        });
       } else {
-        res.status(200).send({ authStatus: false });
+        res
+          .status(200)
+          .send({ authStatus: "false", user: "", ErrorMessage: "" });
       }
     }
   });
