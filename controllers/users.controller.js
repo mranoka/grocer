@@ -74,12 +74,7 @@ exports.authenticateUser = (req, res) => {
         .update(userNameHash + process.env.SALT)
         // Encoding to be used
         .digest("hex");
-
-        console.log(passwordHash)
-        console.log(KEY)
-        console.log(userNameHash + process.env.SALT)
-        console.log(authStatusHash)
-        console.log(data[0] && data[0].password)
+        
       if (data[0] && data[0].password === passwordHash) {
         res.status(200).send({
           authStatus: authStatusHash,
