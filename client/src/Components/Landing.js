@@ -80,29 +80,30 @@ export default class Landing extends React.Component {
   }
 
   fetchUserData(userId) {
-    console.log(userId)
     fetch(`/items/all/${userId}`, {
       method: "GET",
       headers: {
-        'Authorization': `${JSON.parse(sessionStorage.getItem("user")).userID},${JSON.parse(sessionStorage.getItem("user")).isLoggedIn}`
-      }
+        Authorization: `${JSON.parse(sessionStorage.getItem("user")).userID},${
+          JSON.parse(sessionStorage.getItem("user")).isLoggedIn
+        }`,
+      },
     })
       .then((res) => res.json())
-      .then(
-        (response) => {
-          sessionStorage.setItem("userID", `${response.userId}`);
-          if (response.lists.length > 0) {
-            this.setState({
-              itemsArray: response.lists,
-            });
-          } else {
-            this.setState({
-              itemsArray: [],
-            });
-          }
-        },
-        (err) => console.log(err)
-      );
+      .then((response) => {
+        sessionStorage.setItem("userID", `${response.userId}`);
+        if (response.lists.length > 0) {
+          this.setState({
+            itemsArray: response.lists,
+          });
+        } else {
+          this.setState({
+            itemsArray: [],
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   componentDidMount() {
@@ -115,8 +116,8 @@ export default class Landing extends React.Component {
   }
 
   handleDateFormatting(dateString) {
-    let startDate = dateString.substring(0,10)
-    let endDate = dateString.substring(13)
+    let startDate = dateString.substring(0, 10);
+    let endDate = dateString.substring(13);
     var startDateObj = new Date(startDate);
     var endDateObj = new Date(endDate);
 
@@ -129,7 +130,7 @@ export default class Landing extends React.Component {
     let formattedStartDate = startDateObj.toLocaleDateString("en-GB", options);
     let formattedEndDate = endDateObj.toLocaleDateString("en-GB", options);
 
-    return `${formattedStartDate} - ${formattedEndDate}`
+    return `${formattedStartDate} - ${formattedEndDate}`;
   }
 
   render() {

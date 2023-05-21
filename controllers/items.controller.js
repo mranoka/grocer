@@ -47,7 +47,7 @@ exports.addNewUserProfile = (req, res) => {
 };
 
 exports.getAllUserLists = (req, res) => {
-  let userNameHash = req.headers.authorization.split(",")[0].replace("ElWannabi","");
+  let userNameHash = req.headers.authorization.split(",")[0].replace("6902d29564c05dcd0ce5319a109032a64c98ecefea10811587578396f9edb706","");
   let authHash = req.headers.authorization.split(",")[1];
 
   let authStatusHash = crypto

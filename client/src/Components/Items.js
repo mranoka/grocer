@@ -5,6 +5,9 @@ import "../index.css";
 import { BsFillArrowUpCircleFill } from "react-icons/bs";
 import { BsArrowDownCircleFill } from "react-icons/bs";
 
+const controller = new AbortController();
+const signal = controller.signal;
+
 export default class Items extends React.Component {
   constructor(props) {
     super(props);
@@ -34,6 +37,9 @@ export default class Items extends React.Component {
 
   componentDidMount() {}
 
+  componentWillUnmount() {
+    controller.abort();
+  }
   updateList(newArray) {
     fetch(
       `/items/month/${sessionStorage.getItem(
@@ -47,7 +53,8 @@ export default class Items extends React.Component {
         body: JSON.stringify({
           items: [...newArray],
         }),
-      }
+      },
+      signal
     )
       .then((res) => res.json())
       .then(
@@ -57,7 +64,14 @@ export default class Items extends React.Component {
           });
         },
         (err) => console.log(err)
-      );
+      )
+      .catch((err) => {
+        if (err.name === "AbortError") {
+          console.log("successfully aborted");
+        } else {
+          console.log(err);
+        }
+      });
   }
 
   itemRemover(itemArray, itemId) {
