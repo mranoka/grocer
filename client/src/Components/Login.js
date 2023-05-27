@@ -7,9 +7,6 @@ import { BsPersonCircle } from "react-icons/bs";
 import { Navigate } from "react-router-dom";
 import { FallingLines } from "react-loader-spinner";
 import "../index.css";
-const crypto = require("crypto");
-
-const HASH_ALGORITHM_TO_USE = crypto.getHashes()[4];
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -28,16 +25,6 @@ export default class Login extends React.Component {
     this.handlePasswordEntry = this.handlePasswordEntry.bind(this);
   }
 
-  // createUserNameHash(userName) {
-  //   return (
-  //     crypto
-  //       .createHash(HASH_ALGORITHM_TO_USE, process.env.KEY)
-  //       // updating data
-  //       .update(userName)
-  //       // Encoding to be used
-  //       .digest("hex")
-  //   );
-  // }
   handleSubmit(e) {
     e.preventDefault();
     this.startLoginProgressSpinner();
@@ -79,8 +66,9 @@ export default class Login extends React.Component {
               });
             }
           },
-          (err) => console.log(err)
-        );
+        ).catch(err =>{
+          console.log(err)
+        });;
     } else {
       this.stopLoginProgressSpinner();
       return;

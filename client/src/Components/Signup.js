@@ -91,8 +91,9 @@ export default class Signup extends React.Component {
             this.stopSignUpProgressSpinner();
           }
         },
-        (err) => console.log(err)
-      );
+      ).catch(err => {
+        console.log(err)
+      });
   }
 
   saveNewUser(userName, passPhrase) {
