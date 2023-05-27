@@ -4,7 +4,6 @@
     grid-template-columns: 1fr 130px 1fr 2fr 1fr;
     column-gap: 4px;
   }
-  
 
   .item-delete-button {
    width: 60px;
@@ -112,16 +111,11 @@
 
 #landing-container {
   margin: 0;
-  position: absolute;
+  position: relative;
   top: 330px;
   left: 50%;
   transform: translate(-50%, -50%);
   overflow-x: hidden;
-}
-
-#landing-header {
-  position: relative;
-  overflow-x: auto;
 }
 
 #hamburger-menu {

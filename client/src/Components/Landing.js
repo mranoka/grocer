@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import fetch from "isomorphic-fetch";
 import Modal from "react-bootstrap/Modal";
 import { Navigate } from "react-router-dom";
-import { GiHamburgerMenu } from "react-icons/gi";
+import NavBarMenu from "./NavbarMenu";
 import Row from "react-bootstrap/esm/Row";
 import logo from "../Images/logo.png";
 
@@ -148,18 +148,11 @@ export default class Landing extends React.Component {
     return (
       <div>
         <Row id="landing-header">
-          <span id="hamburger-menu">
-            {" "}
-            <GiHamburgerMenu size={40} />
-          </span>
+          <NavBarMenu user={this.state.username.toUpperCase()} />
         </Row>
         <div id="landing-container" className="landing-text">
           <Row id="application-logo-container">
             <img id="application-logo" alt="application logo" src={logo} />
-          </Row>
-          <Row id="welcome-div" className="landing-text">
-            WELCOME <br />
-            {this.state.username}
           </Row>
           <Row id="landing-botons-div">
             <div id="new-list-button" className="landing-text">
