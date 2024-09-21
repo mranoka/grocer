@@ -104,7 +104,7 @@ export default class Login extends React.Component {
       return <Navigate to={this.state.redirect} />;
     }
     return (
-      <div>
+      <div id="login-container-div">
         <Row id="login-icon-row">
           <Col>
             <span onClick={this.handleToHome}>
