@@ -75,7 +75,7 @@ export default class FieldContainer extends React.Component {
   }
 
   updateList() {
-    fetch(`/items/month/${sessionStorage.getItem("userID")}/${sessionStorage.getItem("listID")}`, {
+    fetch(`/list/items/month/${sessionStorage.getItem("userID")}/${sessionStorage.getItem("listID")}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

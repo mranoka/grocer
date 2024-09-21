@@ -107,12 +107,14 @@ export default class Landing extends React.Component {
   }
 
   componentDidMount() {
-    let loggedInUserName = JSON.parse(sessionStorage.getItem("user")).user;
+    if(JSON.parse(sessionStorage.getItem("user"))) {
+      let loggedInUserName = JSON.parse(sessionStorage.getItem("user")).user;
 
-    this.setState({
-      username: loggedInUserName.substring(0, loggedInUserName.indexOf("@")),
-    });
-    this.fetchUserData(JSON.parse(sessionStorage.getItem("user")).user);
+      this.setState({
+        username: loggedInUserName.substring(0, loggedInUserName.indexOf("@")),
+      });
+      this.fetchUserData(JSON.parse(sessionStorage.getItem("user")).user);
+    }
   }
 
   handleDateFormatting(dateString) {

@@ -1,6 +1,6 @@
 {
-  "name": "client",
-  "version": "0.1.0",
+  "name": "GrocerApp",
+  "version": "2.0.0",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
@@ -10,13 +10,13 @@
     "cors": "^2.8.5",
     "isomorphic-fetch": "^3.0.0",
     "nanoid": "^3.1.29",
-    "react": "^17.0.2",
+    "react": "^18.3.1",
     "react-bootstrap": "^2.0.0-beta.4",
-    "react-dom": "^17.0.2",
+    "react-dom": "^18.3.1",
     "react-icons": "^4.3.1",
     "react-loader-spinner": "^5.3.4",
-    "react-router-dom": "^6.8.0",
-    "react-scripts": "4.0.3",
+    "react-router-dom": "^6.26.2",
+    "react-scripts": "^5.0.1",
     "web-vitals": "^1.1.2"
   },
   "scripts": {
