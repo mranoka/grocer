@@ -5,6 +5,11 @@
     column-gap: 4px;
   }
 
+  #main-container-two, #main-container {
+    overflow-x: hidden;
+    height: 100%;
+  }
+
   .item-delete-button {
    width: 60px;
   }
@@ -322,9 +327,7 @@
 }
 
 #login-container-div {
-  height: fit-content;
   height: 100%;
-  top: 20px;
   font-weight: 600;
 }
 
