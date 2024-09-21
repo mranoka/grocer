@@ -35,7 +35,7 @@ export default class NewItem extends React.Component {
 
   updateList(newArray) {
     fetch(
-      `/items/month/${sessionStorage.getItem(
+      `/list/items/month/${sessionStorage.getItem(
         "userID"
       )}/${sessionStorage.getItem("listID")}`,
       {

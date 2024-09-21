@@ -42,7 +42,7 @@ export default class Items extends React.Component {
   }
   updateList(newArray) {
     fetch(
-      `/items/month/${sessionStorage.getItem(
+      `/list/items/month/${sessionStorage.getItem(
         "userID"
       )}/${sessionStorage.getItem("listID")}`,
       {
@@ -86,6 +86,7 @@ export default class Items extends React.Component {
   }
 
   handleDelete(event) {
+    console.log(event.target.value)
     if (
       sessionStorage.getItem("mode") &&
       sessionStorage.getItem("mode") === "1"
@@ -222,11 +223,11 @@ export default class Items extends React.Component {
         <div key={item.uuid + "6"} className="items-row">
           <div key={item.uuid + "5"} className="item-delete-button">
             <button
-              className="delete-boton"
+              className="delete-boton x-marks-spot"
               onClick={this.handleDelete}
               value={item.uuid}
             >
-              <span className="x-marks-spot">&times;</span>
+            &times;
             </button>
           </div>
           <div key={item.uuid + "4"}>

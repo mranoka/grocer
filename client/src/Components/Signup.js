@@ -1,60 +1,39 @@
-import React from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { BsPersonCircle } from "react-icons/bs";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { BsFillArrowLeftCircleFill } from "react-icons/bs";
 import { FallingLines } from "react-loader-spinner";
+import { useState } from 'react';
 
-export default class Signup extends React.Component {
-  constructor(props) {
-    super(props);
+export default function Signup() {
 
-    this.state = {
-      username: "",
-      password: "",
-      signUpDate: "",
-      userID: "",
-      isDuplicateUser: false,
-      redirect: null,
-      isLoaderDisplayed: false,
-    };
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [isDuplicateUser, setIsDuplicateUser] = useState(false);
+  const [isLoaderDisplayed, setIsLoaderDisplayed] = useState(false);
+  const navigate = useNavigate();
 
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handlePasswordEntry = this.handlePasswordEntry.bind(this);
-    this.handleUsernameEntry = this.handleUsernameEntry.bind(this);
-    this.handleToLogin = this.handleToLogin.bind(this);
+  function startSignUpProgressSpinner() {
+    setIsLoaderDisplayed(true);
   }
 
-  handleToLogin() {
-    this.setState({
-      redirect: "/login",
-    });
+  function stopSignUpProgressSpinner() {
+    setIsLoaderDisplayed(false);
   }
 
-  startSignUpProgressSpinner() {
-    this.setState({
-      isLoaderDisplayed: true,
-    });
-  }
-
-  stopSignUpProgressSpinner() {
-    this.setState({
-      isLoaderDisplayed: false,
-    });
-  }
-
-  handleSubmit(e) {
+  function handleSubmit(e) {
     e.preventDefault();
-    if (this.state.username && this.state.password)
-      this.startNewUserProfile(this.state.username, this.state.password);
+    setIsDuplicateUser(false);
+    if (username && password)
+      startNewUserProfile(username, password);
     else return;
   }
 
-  startNewUserProfile(userName, passPhrase) {
-    this.startSignUpProgressSpinner();
+  function startNewUserProfile(userName, passPhrase) {
+    startSignUpProgressSpinner();
     fetch("/new/userprofile", {
       method: "POST",
       headers: {
@@ -71,7 +50,6 @@ export default class Signup extends React.Component {
       .then(
         (response) => {
           if (response.data) {
-            this.saveNewUser(userName, passPhrase);
             sessionStorage.setItem(
               "user",
               JSON.stringify({
@@ -80,74 +58,67 @@ export default class Signup extends React.Component {
                 expiration: new Date().getTime() / 1000 + 12 * 60 * 60,
               })
             );
-            this.setState({
-              redirect: "/",
-            });
-            this.stopSignUpProgressSpinner();
+
+            fetch("/new/user", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                userName: userName,
+                passWord: passPhrase,
+                creationDate: new Date(),
+              }),
+            })
+              .then((res) => res.json())
+              .then(
+                (response) => {
+                  stopSignUpProgressSpinner();
+            
+                  navigate("/");
+                },
+                (err) => console.log(err)
+              );         
+
           } else {
-            this.setState({
-              isDuplicateUser: true,
-            });
-            this.stopSignUpProgressSpinner();
-          }
+            setIsDuplicateUser(true);
+            stopSignUpProgressSpinner();
+           }
         },
       ).catch(err => {
         console.log(err)
       });
   }
 
-  saveNewUser(userName, passPhrase) {
-    fetch("/new/user", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userName: userName,
-        passWord: passPhrase,
-        creationDate: new Date(),
-      }),
-    })
-      .then((res) => res.json())
-      .then(
-        (response) => {
-          this.setState({
-            userID: response.data,
-          });
-        },
-        (err) => console.log(err)
-      );
+  function handleUsernameEntry(e) {
+    setUsername(e.target.value);
   }
 
-  handleUsernameEntry(e) {
-    this.setState({
-      username: e.target.value,
-    });
+  function handlePasswordEntry(e) {
+    setPassword(e.target.value)
   }
 
-  handlePasswordEntry(e) {
-    this.setState({
-      password: e.target.value,
-    });
+  function handleToHome() {
+return;
   }
 
-  render() {
-    if (this.state.redirect) {
-      return <Navigate to={this.state.redirect} />;
-    }
+
+  function handleToLogin() {
+    navigate("/login")
+  }
 
     return (
       <div>
         <Row id="to-login-button">
           <Col>
-            <span onClick={this.handleToLogin}>
+            <span onClick={handleToLogin}>
               <BsFillArrowLeftCircleFill size={30} />
             </span>
           </Col>
         </Row>
         <Row id="sign-up-icon-container">
           <Col>
-            <span id="sign-up-icon" onClick={this.handleToHome}>
+            <span id="sign-up-icon" onClick={handleToHome}>
               <BsPersonCircle size={150} />
             </span>
             <br />
@@ -155,14 +126,14 @@ export default class Signup extends React.Component {
           </Col>
         </Row>
         <Row id="credentials-container">
-          <Form onSubmit={this.handleSubmit}>
+          <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
               <Form.Label>Email address</Form.Label>
               <Form.Control
                 required
                 type="email"
                 placeholder="Enter email"
-                onChange={this.handleUsernameEntry}
+                onChange={handleUsernameEntry}
               />
               <Form.Text className="text-muted"></Form.Text>
             </Form.Group>
@@ -173,7 +144,7 @@ export default class Signup extends React.Component {
                 required
                 type="password"
                 placeholder="Set Password"
-                onChange={this.handlePasswordEntry}
+                onChange={handlePasswordEntry}
               />
             </Form.Group>
             <Button variant="primary" type="submit">
@@ -182,12 +153,12 @@ export default class Signup extends React.Component {
             <FallingLines
               color="#0d6efd"
               width="75"
-              visible={this.state.isLoaderDisplayed}
+              visible={isLoaderDisplayed}
               ariaLabel="falling-lines-loading"
             />
           </Form>
           {/* message if user already exists */}
-          {this.state.isDuplicateUser ? (
+          {isDuplicateUser ? (
             <span id="duplicate-user-warning">
               Email Address Is Already In Use. <br />
               Please Use A Different Email Address To Sign Up
@@ -198,5 +169,4 @@ export default class Signup extends React.Component {
         </Row>
       </div>
     );
-  }
 }

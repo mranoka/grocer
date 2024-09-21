@@ -27,19 +27,17 @@ require('./routes/users.routes').authenticateUser(app);
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.fojyg.mongodb.net/grocer?retryWrites=true&w=majority`
 mongoose.Promise = global.Promise;
 
-mongoose.connect(uri, { 
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  });
+mongoose.connect(uri);
 
 mongoose.connection.on('error', function (error) {
-    console.log('Connection to Mongo established.');
-    console.log('Could not connect to the database Error: ' + error +'\n Exiting now...)');
+    console.log('Could not connect to the database. ' + error +'\n Exiting now...)');
     process.exit();
 });
+
 mongoose.connection.once('open', function () {
     console.log("Successfully connected to the database");
 })
+
 
 // error handler
 app.use(function (err, req, res, next) {
@@ -49,12 +47,12 @@ app.use(function (err, req, res, next) {
 
     // render the error page
     res.status(err.status || 500);
-    res.render('error');
+    res.json({"error": err});
 });
 
 module.exports = app;
 
-// serve statis assets if in production
+// serve status assets if in production
 if (process.env.NODE_ENV === 'production') {
     // set static folder
     app.use(express.static('client/build'));

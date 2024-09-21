@@ -18,29 +18,31 @@ import RequireAuth from "./Components/RequireAuth";
 
 function App() {
   return (
-    <Container id="main-container">
-      <Routes id="main-container-two">
-        <Route path="/login" element={<Login />} />
-        <Route path="*" element={<NotFound />} />
-        <Route
-          path="/"
-          element={
-            <RequireAuth>
-              <Landing />
-            </RequireAuth>
-          }
-        />
-        <Route path="/signup" element={<Signup />} />
-        <Route
-          path="/container"
-          element={
-            <RequireAuth>
-              <FieldContainer />
-            </RequireAuth>
-          }
-        />
-      </Routes>
-    </Container>
+    <>
+      <Container id="main-container">
+        <Routes id="main-container-two">
+          <Route path="/login" element={<Login />} />
+          <Route path="*" element={<NotFound />} />
+          <Route
+            path="/"
+            element={
+              <RequireAuth>
+                <Landing />
+              </RequireAuth>
+            }
+          />
+          <Route path="/signup" element={<Signup />} />
+          <Route
+            path="/container"
+            element={
+              <RequireAuth>
+                <FieldContainer />
+              </RequireAuth>
+            }
+          />
+        </Routes>
+      </Container>
+    </>
   );
 }
 

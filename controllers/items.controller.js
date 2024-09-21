@@ -1,89 +1,90 @@
 const mongoose = require("mongoose");
 const Item = require("../models/item.model");
-mongoose.set("useFindAndModify", false);
 const crypto = require("crypto");
-const HASH_ALGORITHM_TO_USE = crypto.getHashes().find(itemName => itemName === "sha256");
+const HASH_ALGORITHM_TO_USE = crypto
+  .getHashes()
+  .find((itemName) => itemName === "sha256");
 
-
-exports.addNewUserProfile = (req, res) => {
-  Item.find({ userName: req.body.userName }, (err, data) => {
-    if (err) {
-      res.status(400).send({
+exports.addNewUserProfile = async (req, res) => {
+  try {
+    let result = await Item.find({ userName: req.body.userName }).exec();
+    if (result.length > 0) {
+      res.status(200).send({
         data: "",
-        ErrorMessage: "Error occured while retrieving records from database",
+        ErrorMessage: "User already exists",
       });
-    } else {
-      if (data.length > 0) {
-        res.status(200).send({ data: "" });
+    } else if (result.length == 0) {
+      const passwordHash = crypto
+        .createHash(HASH_ALGORITHM_TO_USE, process.env.KEY)
+        // updating data
+        .update(req.body.passWord)
+        // Encoding to be used
+        .digest("hex");
+
+      // create new user profile and persist to database
+      const newItem = new Item({
+        userName: req.body.userName,
+        password: passwordHash,
+        isAdmin: req.body.isPrivileged,
+        lists: req.body.itemLists,
+      });
+
+      let savedUserProfile = await newItem.save();
+      if (savedUserProfile) {
+        res.status(200).send({ data: "200 ok" });
       } else {
-        const passwordHash = crypto
-          .createHash(HASH_ALGORITHM_TO_USE, process.env.KEY)
-          // updating data
-          .update(req.body.passWord)
-          // Encoding to be used
-          .digest("hex");
-
-        // create new user profile and persist to database
-        const newItem = new Item({
-          userName: req.body.userName,
-          password: passwordHash,
-          isAdmin: req.body.isPrivileged,
-          lists: req.body.itemLists,
-        });
-
-        newItem.save((err, data) => {
-          if (err) {
-            res.status(400).send({
-              data: "",
-              ErrorMessage: `Error occured while adding item to database: Item not added. Info: ${err}`,
-            });
-          } else {
-            res.status(200).send({ data: data._id });
-          }
-        });
-      }
-    }
-  });
-};
-
-exports.getAllUserLists = (req, res) => {
-  let userNameHash = req.headers.authorization.split(",")[0].replace("6902d29564c05dcd0ce5319a109032a64c98ecefea10811587578396f9edb706","");
-  let authHash = req.headers.authorization.split(",")[1];
-
-  let authStatusHash = crypto
-  .createHash(HASH_ALGORITHM_TO_USE, process.env.KEY)
-  // updating data
-  .update(userNameHash + process.env.SALT)
-  // Encoding to be used
-  .digest("hex");
-
-  if(authHash === authStatusHash) {
-    Item.find({ userName: req.params.userId }, (err, data) => {
-      if (err) {
         res.status(400).send({
-          lists: [],
-          userId: "",
-          ErrorMessage: "Error occured while retrieving records from database",
+          data: null,
+          ErrorMessage: `Error occured while adding item to database: User not added`,
         });
-      } else {
-        res.status(200).send({ lists: data[0]?.lists, userId: data[0]._id });
       }
+    } else {
+      res.status(400).send({
+        data: null,
+        ErrorMessage:
+          "Error occured while adding item to database: User not added",
+      });
+    }
+  } catch (error) {
+    res.status(400).send({
+      data: null,
+      ErrorMessage:
+        "Error occured while adding item to database: User not added",
     });
-  } else {
-    res.status(200).send({ lists: [], userId: data[0]._id });
   }
 };
 
-exports.oldItemsById = (req, res) => {
-  Item.find({ _id: req.params.userId }, (err, data) => {
-    if (err) {
+exports.getAllUserLists = async (req, res) => {
+  try {
+    let response = await Item.find({ userName: req.params.userId }).exec();
+    if (response.length == 0) {
+      res.status(400).send({
+        lists: [],
+        userId: "",
+        ErrorMessage: "Error occured while retrieving records from database",
+      });
+    } else {
+      res
+        .status(200)
+        .send({ lists: response[0].lists, userId: response[0]._id });
+    }
+  } catch (error) {
+    res.status(400).send({ lists: [], userId: "unknown user 404" });
+  }
+};
+
+exports.oldItemsById = async (req, res) => {
+  try {
+    let result = await Item.find({ _id: req.params.userId }).exec();
+
+    if (result.length == 0) {
       res.status(400).send({
         items: [],
         listDate: "",
         ErrorMessage: "Erro occured while retrieving record from database",
       });
     } else {
-      let listsArr = data[0].lists;
+      let listsArr = result[0].lists;
 
       for (let i = 0; i < listsArr.length; i++) {
         if (listsArr[i]._id == req.params.listId) {
@@ -94,61 +95,73 @@ exports.oldItemsById = (req, res) => {
         }
       }
     }
-  });
+  } catch (error) {
+    res.status(400).send({
+      items: [],
+      listDate: "",
+      ErrorMessage: "Erro occured while retrieving record from database",
+    });
+  }
 };
 
-exports.updateItem = (req, res) => {
-  Item.find({ _id: req.params.userId }, (err, data) => {
-    if (err) {
+exports.updateItem = async (req, res) => {
+  try {
+    let result = await Item.find({ _id: req.params.userId }).exec();
+
+    if (result.length == 0) {
       res.status(400).send({
         items: [],
         listDate: "",
         ErrorMessage: "Erro occured while retrieving record from database",
       });
     } else {
-      for (let i = 0; i < data[0].lists.length; i++) {
-        if (data[0].lists[i]._id == req.params.listId) {
-          data[0].lists[i].items = req.body.items;
+      for (let i = 0; i < result[0].lists.length; i++) {
+        if (result[0].lists[i]._id == req.params.listId) {
+          result[0].lists[i].items = req.body.items;
           break;
         }
       }
-
-      Item.updateOne(
+      let updateResonse = await Item.updateOne(
         { _id: req.params.userId },
-        { lists: data[0].lists },
-        (err, updateStatus) => {
-          if (err) {
-            res.status(400).send({
-              ErrorMessage:
-                "Error occured while updating item: Item(s) not added",
-              documentsMatched: 0,
-              documentsModified: 0,
-            });
-          } else {
-            res.status(200).send({
-              documentsMatched: updateStatus.nModified,
-              documentsModified: updateStatus.nModified,
-            });
-          }
-        }
-      );
+        { lists: result[0].lists }
+      ).exec();
+
+      if (updateResonse.acknowledged) {
+        res.status(200).send({
+          documentsMatched: updateResonse.matchedCount,
+          documentsModified: updateResonse.modifiedCount,
+        });
+      } else {
+        res.status(400).send({
+          ErrorMessage: "Error occured while updating item: Item(s) not added",
+          documentsMatched: 0,
+          documentsModified: 0,
+        });
+      }
     }
-  });
+  } catch (error) {
+    res.status(400).send({
+      items: [],
+      listDate: "",
+      ErrorMessage: "Erro occured while retrieving record from database",
+    });
+  }
 };
 
-exports.addNewItemsList = (req, res) => {
-  let userItemsArray = [];
+exports.addNewItemsList = async (req, res) => {
+  try {
+    let userItemsArray = [];
 
-  Item.find({ userName: req.body.userId }, (err, data) => {
-    if (err) {
+    let result = await Item.find({ userName: req.body.userId }).exec();
+
+    if (result.length == 0) {
       res.status(400).send({
-        ErrorMessage:
-          "Error occured while updating item: Item(s) not added",
+        ErrorMessage: "Error occured while updating item: Item(s) not added",
         data: "",
       });
     } else {
       // retrieve all user's item lists
-      if (data[0].lists.length > 0) userItemsArray = data[0].lists;
+      if (result[0].lists.length > 0) userItemsArray = result[0].lists;
 
       let newListObj = {
         listDate: req.body.dates,
@@ -157,46 +170,43 @@ exports.addNewItemsList = (req, res) => {
 
       userItemsArray.push(newListObj);
 
-      Item.findOneAndUpdate(
+      var resultData = await Item.findOneAndUpdate(
         { userName: req.body.userId },
-        { lists: userItemsArray },
-        (err, data) => {
-          if (err) {
-            res.status(400).send({
-              data: "",
-              ErrorMessage: "Error occured while updating item: Item not added",
-            });
-          } else {
-            // return _id of newly added list
-            Item.find({ _id: data._id }, (err, data) => {
-              if (err) {
-                res.status(400).send({
-                  data: "",
-                  ErrorMessage:
-                    "Error occured while finding item: Item not found",
-                });
-              } else {
-                res.status(200).send({
-                  data: data[0].lists[data[0].lists.length - 1],
-                });
-              }
-            });
-          }
-        }
-      );
+        { lists: userItemsArray }
+      ).exec();
+
+      if(resultData) {
+        let listData = await Item.find({ userName: req.body.userId }).exec();
+        res.status(200).send({
+          data: listData[0].lists[listData[0].lists.length - 1],
+        });
+      }
+
+
     }
-  });
+  } catch (error) {
+    res.status(402).send({
+      ErrorMessage: "Error occured while updating item: Item(s) not added " + error,
+      data: "",
+    });
+  }
 };
 
-exports.deleteItem = (req, res) => {
-  Item.deleteOne({ _id: req.body.id }, (err, data) => {
-    if (err) {
+exports.deleteItem = async (req, res) => {
+  try {
+    let result = await Item.deleteOne({ _id: req.body.id });
+    if (result.ok != 1) {
       res.status(400).send({
         Error: "Error occured while deleting item: Item not deleted",
         itemsDeleted: 0,
       });
     } else {
-      res.status(400).send({ itemsDeleted: data.deletedCount });
+      res.status(400).send({ itemsDeleted: result.deletedCount });
     }
-  });
+  } catch (error) {
+    res.status(400).send({
+      Error: `Error occured while deleting item: Item not deleted: ${error}`,
+      itemsDeleted: 0,
+    });
+  }
 };

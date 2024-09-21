@@ -13,7 +13,7 @@ exports.itemsGetById = (app) => {
 }
 
 exports.itemsUpdate = (app) => {
-    app.put('/items/month/:userId/:listId', items.updateItem);
+    app.put('/list/items/month/:userId/:listId', items.updateItem);
 }
 
 exports.getUserItems = (app) => {
