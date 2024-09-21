@@ -321,8 +321,9 @@
   font-weight: 600;
 }
 
-#login-container {
-  position: relative;
+#login-container-div {
+  height: fit-content;
+  height: 100%;
   top: 20px;
   font-weight: 600;
 }
