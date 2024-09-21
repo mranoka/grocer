@@ -10,6 +10,13 @@
     height: 100%;
   }
 
+  #login-container-div {
+    height: 550px;
+    font-weight: 600;
+    overflow-y: hidden;
+    overflow-x: hidden;
+  }
+
   .item-delete-button {
    width: 60px;
   }
@@ -97,6 +104,11 @@
 
 #items-list {
   margin-top: 20px;
+}
+
+#login-container-div {
+  height: 100%;
+  font-weight: 600;
 }
 
 #main-container-two {
@@ -326,10 +338,7 @@
   font-weight: 600;
 }
 
-#login-container-div {
-  height: 100%;
-  font-weight: 600;
-}
+
 
 
 /* login page end */
