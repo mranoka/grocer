@@ -5,6 +5,10 @@
     column-gap: 4px;
   }
 
+  #sign-up-prompt {
+    height: 200px;
+    background-color: #ff0000;
+  }
   #main-container-two, #main-container {
     overflow-x: hidden;
     height: 100%;
@@ -13,8 +17,6 @@
   #login-container-div {
     height: 550px;
     font-weight: 600;
-    overflow-y: hidden;
-    overflow-x: hidden;
   }
 
   .item-delete-button {
