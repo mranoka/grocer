@@ -66,3 +66,5 @@ if (process.env.NODE_ENV === 'production') {
 app.listen(PORT, ()=> {
     console.log(`Listening at http://localhost:${PORT}`)
 })
+
+//"heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
