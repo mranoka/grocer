@@ -1,11 +1,6 @@
 import {
   Routes,
   Route,
-  // Link,
-  // useNavigate,
-  // useLocation,
-  // Navigate,
-  // Outlet,
 } from "react-router-dom";
 import "./index.css";
 import Landing from "./Components/Landing";
@@ -15,6 +10,7 @@ import NotFound from "./Components/ErrorPage";
 import FieldContainer from "./Components/Container";
 import Signup from "./Components/Signup";
 import RequireAuth from "./Components/RequireAuth";
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 function App() {
   return (
@@ -42,6 +38,7 @@ function App() {
           />
         </Routes>
       </Container>
+      <SpeedInsights />
     </>
   );
 }
