@@ -1,6 +1,6 @@
 # GrocerApp
 ### A simple web application that helps manage a grocery list
-#### Deployed at: https://grocerapp.onrender.com/
+#### Deployed at: https://grocer-one.vercel.app
 ##
 ## Login Page:
 ![WhatsApp Image 2023-02-13 at 16 26 31](https://user-images.githubusercontent.com/65610474/218485950-864e4b94-b7d7-4c2a-b52e-4c6bc403aa68.jpeg)
