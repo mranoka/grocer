@@ -28,7 +28,7 @@ export default class FieldContainer extends React.Component {
   }
 
   startList() {
-    fetch("/new/item", {
+    fetch(`${process.env.REACT_APP_API_KEY}/new/item`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -51,7 +51,7 @@ export default class FieldContainer extends React.Component {
   }
 
   startNewItemsList() {
-    fetch("/new/list", {
+    fetch(`${process.env.REACT_APP_API_KEY}/new/list`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -75,7 +75,7 @@ export default class FieldContainer extends React.Component {
   }
 
   updateList() {
-    fetch(`/list/items/month/${sessionStorage.getItem("userID")}/${sessionStorage.getItem("listID")}`, {
+    fetch(`${process.env.REACT_APP_API_KEY}/list/items/month/${sessionStorage.getItem("userID")}/${sessionStorage.getItem("listID")}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -97,7 +97,7 @@ export default class FieldContainer extends React.Component {
 
   fetchData() {
     fetch(
-      `/item/${sessionStorage.getItem("userID")}/${sessionStorage.getItem(
+      `${process.env.REACT_APP_API_KEY}/item/${sessionStorage.getItem("userID")}/${sessionStorage.getItem(
         "listID"
       )}`
     )

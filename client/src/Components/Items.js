@@ -42,7 +42,7 @@ export default class Items extends React.Component {
   }
   updateList(newArray) {
     fetch(
-      `https://grocerapp.onrender.com/list/items/month/${sessionStorage.getItem(
+      `${process.env.REACT_APP_API_KEY}/items/month/${sessionStorage.getItem(
         "userID"
       )}/${sessionStorage.getItem("listID")}`,
       {
