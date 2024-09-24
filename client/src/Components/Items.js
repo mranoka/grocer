@@ -42,7 +42,7 @@ export default class Items extends React.Component {
   }
   updateList(newArray) {
     fetch(
-      `/list/items/month/${sessionStorage.getItem(
+      `https://grocerapp.onrender.com/list/items/month/${sessionStorage.getItem(
         "userID"
       )}/${sessionStorage.getItem("listID")}`,
       {
@@ -101,7 +101,7 @@ export default class Items extends React.Component {
   }
 
   handlePriceCheck(event) {
-    console.log(event.target.className);
+   // console.log(event.target.className);
     // this.setState({
     //   priceCheck: event.target.checked
     // })

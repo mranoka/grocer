@@ -30,7 +30,7 @@ export default class Login extends React.Component {
     this.startLoginProgressSpinner();
 
     if (this.state.password && this.state.username) {
-      fetch("/auth/user", {
+      fetch("https://grocerapp.onrender.com/auth/user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
