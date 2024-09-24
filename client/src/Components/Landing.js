@@ -80,7 +80,7 @@ export default class Landing extends React.Component {
   }
 
   fetchUserData(userId) {
-    fetch(`/items/all/${userId}`, {
+    fetch(`https://grocerapp.onrender.com/items/all/${userId}`, {
       method: "GET",
       headers: {
         Authorization: `${JSON.parse(sessionStorage.getItem("user")).userID},${

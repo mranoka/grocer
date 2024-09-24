@@ -34,7 +34,7 @@ export default function Signup() {
 
   function startNewUserProfile(userName, passPhrase) {
     startSignUpProgressSpinner();
-    fetch("/new/userprofile", {
+    fetch("https://grocerapp.onrender.com/new/userprofile", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -59,7 +59,7 @@ export default function Signup() {
               })
             );
 
-            fetch("/new/user", {
+            fetch("https://grocerapp.onrender.com/new/user", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
