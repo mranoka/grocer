@@ -1,19 +1,53 @@
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
+
 
 function NavbarMenu(props) {
+  const navigate = useNavigate();
+
+  let itemsList = props.oldLists.map(item => (
+  <NavDropdown.Item key={item._id} value={item._id} onClick={handleListSelection}>
+    {handleDateFormatting(item.listDate)}
+  </NavDropdown.Item>
+  ));
 
   function handleLogout() {
-    console.log("redirection")
-    document.reload()
-      return <Navigate to="/login" />;
+    sessionStorage.clear();
+    navigate("/login");
+  }
+
+  function handleListSelection(e) {
+    sessionStorage.setItem("listID", e.target.attributes.value.value);
+    sessionStorage.setItem("sentinel", `777`);
+    sessionStorage.setItem("mode", "0");
+
+    navigate("/container");
+  }
+
+  function handleDateFormatting(dateString) {
+    let startDate = dateString.substring(0, 10);
+    let endDate = dateString.substring(13);
+    var startDateObj = new Date(startDate);
+    var endDateObj = new Date(endDate);
+  
+    var options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+  
+    let formattedStartDate = startDateObj.toLocaleDateString("en-GB", options);
+    let formattedEndDate = endDateObj.toLocaleDateString("en-GB", options);
+  
+    return `${formattedStartDate} - ${formattedEndDate}`;
   }
 
   return (
     <Navbar bg="light" expand="lg">
-        <Navbar.Brand href="#">Welcome {props.user}</Navbar.Brand>
+        <Navbar.Brand href="#"> {props.user}</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav
@@ -21,16 +55,9 @@ function NavbarMenu(props) {
             style={{ maxHeight: '300px' }}
             navbarScroll
           >
-            <Nav.Link href="#action1">New List +</Nav.Link>
             <Nav.Link href="#action2">Profile</Nav.Link>
             <NavDropdown title="Old Lists" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action4">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#action5">
-                Something else here
-              </NavDropdown.Item>
+              {itemsList}
             </NavDropdown>
             <Nav.Link href="#" onClick={handleLogout}>
               Logout
