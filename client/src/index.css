@@ -23,8 +23,12 @@
   }
 
   #application-logo-container {
-    margin-top: 5%;
     width: 90vw;
+    position: relative;
+    top: 150px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow-x: hidden;
   }
 
   #application-logo {
@@ -96,6 +100,15 @@
   }
   /* error page end */
 
+  #landing-container-outer {
+    height: 100vh;
+  }
+
+  #new-list-button {
+    position: relative;
+    left: -17px;
+  }
+
 }
 
 .item-checkbox {
@@ -127,7 +140,7 @@
   margin: 0;
   position: relative;
   top: 330px;
-  left: 50%;
+  left: 55%;
   transform: translate(-50%, -50%);
   overflow-x: hidden;
 }
@@ -386,6 +399,14 @@
     display: grid;
     grid-template-columns: 2fr 130px 1fr 2fr 1fr;
     column-gap: 4px;
+  }
+
+  #application-logo-container {
+    position: relative;
+    top: 150px;
+    left: 65%;
+    transform: translate(-50%, -50%);
+    overflow-x: hidden;
   }
 
   .item-checkbox {

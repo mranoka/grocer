@@ -148,9 +148,9 @@ export default class Landing extends React.Component {
     }
 
     return (
-      <div>
+      <div id="landing-container-outer">
         <Row id="landing-header">
-          <NavBarMenu user={this.state.username.toUpperCase()} />
+          <NavBarMenu user={this.state.username.toUpperCase()} oldLists={this.state.itemsArray} />
         </Row>
         <div id="landing-container" className="landing-text">
           <Row id="application-logo-container">
@@ -165,19 +165,6 @@ export default class Landing extends React.Component {
               >
                 NEW LIST +
               </Button>
-            </div>
-            <div id="old-list-div">
-              <Form.Label>Old Lists:</Form.Label>
-              <Form.Select
-                aria-label="Default select example"
-                onChange={this.handleChange}
-                value="yyyy-mm-dd"
-              >
-                <option defaultValue={"yyyy-mm-dd"} disabled>
-                  yyyy-mm-dd
-                </option>
-                {itemsList}
-              </Form.Select>
             </div>
           </Row>
 
