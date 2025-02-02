@@ -4,45 +4,26 @@ import Col from "react-bootstrap/Col";
 import "../index.css";
 import { BsFillArrowUpCircleFill } from "react-icons/bs";
 import { BsArrowDownCircleFill } from "react-icons/bs";
+import { useState } from 'react';
 
 const controller = new AbortController();
 const signal = controller.signal;
 
-export default class Items extends React.Component {
-  constructor(props) {
-    super(props);
+export default function Items(props) {
+    const [updateResponse, setUpdateResponse] = useState('');
+    const [itemsTotal, setItemsTotal] = useState(0);
+    const [totalSentinel, setTotalSentinel] = useState(false);
+    const [showExpander, setShowExpander] = useState(false);
+    const [showShrinker, setShowShrinker] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(false);
 
-    this.state = {
-      updateResponse: "",
-      itemPrice: "",
-      itemsTotal: 0,
-      priceSet: "",
-      totalSentinel: false,
-      priceCheck: false,
-      showExpander: false,
-      showShrinker: false,
-      isExpanded: false,
-      expandSentinel: false,
-    };
-
-    this.handleDelete = this.handleDelete.bind(this);
-    this.handlePriceCheck = this.handlePriceCheck.bind(this);
-    this.handlePriceChange = this.handlePriceChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleQuantityChange = this.handleQuantityChange.bind(this);
-    this.showDiveEnlarger = this.showDiveEnlarger.bind(this);
-    this.handleItemDisplayExpand = this.handleItemDisplayExpand.bind(this);
-    this.handleItemDisplayShrink = this.handleItemDisplayShrink.bind(this);
-  }
-
-  componentDidMount() {}
-
-  componentWillUnmount() {
+  function componentWillUnmount() {
     controller.abort();
   }
-  updateList(newArray) {
+
+  function updateList(newArray) {
     fetch(
-      `${process.env.REACT_APP_API_KEY}/items/month/${sessionStorage.getItem(
+      `${process.env.REACT_APP_API_KEY}/list/items/month/${sessionStorage.getItem(
         "userID"
       )}/${sessionStorage.getItem("listID")}`,
       {
@@ -59,9 +40,7 @@ export default class Items extends React.Component {
       .then((res) => res.json())
       .then(
         (response) => {
-          this.setState({
-            updateResponse: response,
-          });
+          setUpdateResponse(response);
         },
         (err) => console.log(err)
       )
@@ -74,7 +53,7 @@ export default class Items extends React.Component {
       });
   }
 
-  itemRemover(itemArray, itemId) {
+  function removeSelectedItem(itemArray, itemId) {
     itemArray.forEach((element) => {
       if (element.uuid === itemId) {
         const index = itemArray.indexOf(element);
@@ -85,43 +64,48 @@ export default class Items extends React.Component {
     return itemArray;
   }
 
-  handleDelete(event) {
-    console.log(event.target.value)
+  function handleDelete(event) {
     if (
       sessionStorage.getItem("mode") &&
       sessionStorage.getItem("mode") === "1"
     ) {
-      this.updateList(this.itemRemover(this.props.items, event.target.value));
+      updateList(removeSelectedItem(props.items, event.target.value));
     }
 
     sessionStorage.setItem(
       "items",
-      JSON.stringify(this.itemRemover(this.props.items, event.target.value))
+      JSON.stringify(removeSelectedItem(props.items, event.target.value))
     );
   }
 
-  handlePriceCheck(event) {
-   // console.log(event.target.className);
-    // this.setState({
-    //   priceCheck: event.target.checked
-    // })
+  function handlePriceCheck(event) {
+    // blur list item if it is marked as done
+    itemsList.forEach(item => {
+      if(item.key == event.target.value) {
+         let checkedItem = document.getElementById(item.key);
+         if(event.target.checked)
+          checkedItem.className = checkedItem.className + " item-status";
+         else
+          checkedItem.className = checkedItem.className.replace(" item-status", "");
+
+        return;
+      }
+    })
   }
 
-  handlePriceChange(event) {
-    this.props.items.forEach((item) => {
+  function handlePriceChange(event) {
+    props.items.forEach((item) => {
       if (item.uuid === event.target.id) {
         item.price = event.target.value;
       }
     });
-    sessionStorage.setItem("items", JSON.stringify(this.props.items));
+    sessionStorage.setItem("items", JSON.stringify(props.items));
 
-    if (!this.state.totalSentinel)
-      this.setState({
-        totalSentinel: true,
-      });
+    if (!totalSentinel)
+      setTotalSentinel(true);
   }
 
-  handleSubmit(event) {
+  function handleSubmit(event) {
     event.preventDefault(); // prevent page reload on form submission
     let holderArray = [];
     let total = 0;
@@ -135,68 +119,52 @@ export default class Items extends React.Component {
       }
     });
 
-    this.setState({
-      itemsTotal: total,
-      totalSentinel: false,
-    });
+    setItemsTotal(total);
+    setTotalSentinel(false)
 
     // update remote list
-    this.updateList(holderArray);
+    updateList(holderArray);
   }
 
-  handleQuantityChange(event) {
-    this.props.items.forEach((item, index) => {
+  function handleQuantityChange(event) {
+    props.items.forEach((item, index) => {
       if (event.target.id === item.uuid) {
         item.quantity = event.target.value;
       }
     });
-    sessionStorage.setItem("items", JSON.stringify(this.props.items));
+    sessionStorage.setItem("items", JSON.stringify(props.items));
 
-    if (!this.state.totalSentinel)
-      this.setState({
-        totalSentinel: true,
-      });
+    if (!totalSentinel)
+      setTotalSentinel(true);
   }
 
-  showDiveEnlarger() {
-    if (this.state.isExpanded) {
-      this.setState({
-        showShrinker: true,
-      });
+  function handleDiveResizerDisplay() {
+    if (isExpanded) {
+      setShowShrinker(true);
 
       setTimeout(() => {
-        this.setState({
-          showShrinker: false,
-        });
-      }, 5000);
+        setShowShrinker(false);
+      }, 8000);
     } else {
-      this.setState({
-        showExpander: true,
-      });
+      setShowExpander(true);
 
       setTimeout(() => {
-        this.setState({
-          showExpander: false,
-        });
+        setShowExpander(false);
       }, 5000);
     }
   }
 
-  handleItemDisplayExpand() {
-    this.setState({
-      isExpanded: true,
-      showExpander: false,
-    });
+  function handleItemDisplayExpand() {
+    setIsExpanded(true);
+    setShowExpander(false);
   }
 
-  handleItemDisplayShrink() {
-    this.setState({
-      isExpanded: false,
-      showShrinker: false,
-    });
+  function handleItemDisplayShrink() {
+    setIsExpanded(false);
+    setShowShrinker(false);
   }
 
-  orderByCategory(itemsArray) {
+  function orderByCategory(itemsArray) {
     // avoid breaking app on initial load due to empty itemsArray
     if (itemsArray === null) {
       return;
@@ -216,61 +184,60 @@ export default class Items extends React.Component {
     return [...houseArray, ...frozenArray, ...dryArray, ...wetArray];
   }
 
-  render() {
-    let orderedArray = this.orderByCategory(this.props.items);
-    const itemsList = orderedArray?.map((item, index) => (
-      <div id={item.category} className="item-container" key={item.uuid}>
-        <div key={item.uuid + "6"} className="items-row">
-          <div key={item.uuid + "5"} className="item-delete-button">
-            <button
-              className="delete-boton x-marks-spot"
-              onClick={this.handleDelete}
-              value={item.uuid}
-            >
-            &times;
-            </button>
-          </div>
-          <div key={item.uuid + "4"}>
-            <div className="item-description">
-              <span className="item-name">{item.itemName}</span>
-            </div>
-          </div>
-          <div className="div-item-quantity" key={item.uuid + "3"}>
-            <input
-              className="item-quantity"
-              type="number"
-              step="1"
-              placeholder={item.quantity}
-              name="quantity"
-              id={item.uuid}
-              onChange={this.handleQuantityChange}
-            />
-          </div>
-          <div key={item.uuid + "2"}>
-            <input
-              placeholder={item.price ?? "price"}
-              className="item-price"
-              type="number"
-              id={item.uuid}
-              name="priceSet"
-              onChange={this.handlePriceChange}
-            />
-          </div>
-          <div key={item.uuid + "1"}>
-            <input
-              className="item-checkbox"
-              type="checkbox"
-              value=""
-              onChange={this.handlePriceCheck}
-              name={item.itemName + "priceCheck"}
-            />
+  let orderedArray = orderByCategory(props.items);
+  const itemsList = orderedArray?.map((item, index) => (
+    <div id={item.uuid} className={item.category + " item-container"} key={item.uuid}>
+      <div key={item.uuid + "6"} className="items-row">
+        <div key={item.uuid + "5"} className="item-delete-button">
+          <button
+            className="delete-boton x-marks-spot"
+            onClick={handleDelete}
+            value={item.uuid}
+          >
+          &times;
+          </button>
+        </div>
+        <div key={item.uuid + "4"}>
+          <div className="item-description">
+            <span className="item-name">{item.itemName}</span>
           </div>
         </div>
+        <div className="div-item-quantity" key={item.uuid + "3"}>
+          <input
+            className="item-quantity"
+            type="number"
+            step="1"
+            placeholder={item.quantity}
+            name="quantity"
+            id={item.uuid}
+            onChange={handleQuantityChange}
+          />
+        </div>
+        <div key={item.uuid + "2"}>
+          <input
+            placeholder={item.price ?? "price"}
+            className="item-price"
+            type="number"
+            id={item.uuid}
+            name="priceSet"
+            onChange={handlePriceChange}
+          />
+        </div>
+        <div key={item.uuid + "1"}>
+          <input
+            className="item-checkbox"
+            type="checkbox"
+            value={item.uuid}
+            onChange={handlePriceCheck}
+            name={item.itemName + "priceCheck"}
+          />
+        </div>
       </div>
-    ));
+    </div>
+  ));
 
     return (
-      <form onSubmit={this.handleSubmit} id="items-list">
+      <form onSubmit={handleSubmit} id="items-list">
         <Row id="totals-row">
           <hr id="line-one" />
           <Col>
@@ -280,27 +247,21 @@ export default class Items extends React.Component {
           </Col>
           <Col>
             <span
-              className={this.state.totalSentinel ? "strike-red" : "no-strike"}
+              className={totalSentinel ? "strike-red" : "no-strike"}
               id="items-total"
             >
-              {this.state.itemsTotal}
+              {itemsTotal}
             </span>
           </Col>
           <hr id="line-two" />
         </Row>
         <div
           id="serious-container"
-          onScroll={this.showDiveEnlarger}
-          className={
-            this.state.isExpanded
-              ? "serious-container-big"
-              : "serious-container-small"
-          }
         >
           <div
             id="scroll-pane-expander"
-            onClick={this.handleItemDisplayExpand}
-            className={this.state.showExpander ? "" : "show-expander"}
+            onClick={handleItemDisplayExpand}
+            className={showExpander ? "" : "show-expander"}
           >
             <span id="expand">
               <BsFillArrowUpCircleFill size={50} color="blue" />
@@ -308,16 +269,20 @@ export default class Items extends React.Component {
           </div>
           <div
             id="scroll-pane-shrinker"
-            onClick={this.handleItemDisplayShrink}
-            className={this.state.showShrinker ? "" : "show-shrinker"}
+            onClick={handleItemDisplayShrink}
+            className={showShrinker ? "" : "show-shrinker"}
           >
             <span id="shrink">
               <BsArrowDownCircleFill size={50} color="blue" />
             </span>
           </div>
-          <div id="outer-item-container">{itemsList}</div>
+          <div onScroll={handleDiveResizerDisplay} className={
+            isExpanded
+              ? "items-container-big"
+              : "items-container-small"
+          }
+          >{itemsList}</div>
         </div>
       </form>
     );
-  }
 }
