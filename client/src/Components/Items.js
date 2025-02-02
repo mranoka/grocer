@@ -5,6 +5,8 @@ import "../index.css";
 import { BsFillArrowUpCircleFill } from "react-icons/bs";
 import { BsArrowDownCircleFill } from "react-icons/bs";
 import { useState } from 'react';
+import { MdExpandCircleDown } from "react-icons/md";
+import { IoIosArrowDropdownCircle } from "react-icons/io";
 
 const controller = new AbortController();
 const signal = controller.signal;
@@ -79,10 +81,18 @@ export default function Items(props) {
   }
 
   function handlePriceCheck(event) {
-   // console.log(event.target.className);
-    // this.setState({
-    //   priceCheck: event.target.checked
-    // })
+    // blur list item if it is marked as done
+    itemsList.forEach(item => {
+      if(item.key == event.target.value) {
+         let checkedItem = document.getElementById(item.key);
+         if(event.target.checked)
+          checkedItem.className = checkedItem.className + " item-status";
+         else
+          checkedItem.className = checkedItem.className.replace(" item-status", "");
+
+        return;
+      }
+    })
   }
 
   function handlePriceChange(event) {
@@ -130,13 +140,13 @@ export default function Items(props) {
       setTotalSentinel(true);
   }
 
-  function showDiveEnlarger() {
+  function handleDiveResizerDisplay() {
     if (isExpanded) {
       setShowShrinker(true);
 
       setTimeout(() => {
         setShowShrinker(false);
-      }, 5000);
+      }, 8000);
     } else {
       setShowExpander(true);
 
@@ -178,7 +188,7 @@ export default function Items(props) {
 
   let orderedArray = orderByCategory(props.items);
   const itemsList = orderedArray?.map((item, index) => (
-    <div id={item.category} className="item-container" key={item.uuid}>
+    <div id={item.uuid} className={item.category + " item-container"} key={item.uuid}>
       <div key={item.uuid + "6"} className="items-row">
         <div key={item.uuid + "5"} className="item-delete-button">
           <button
@@ -219,7 +229,7 @@ export default function Items(props) {
           <input
             className="item-checkbox"
             type="checkbox"
-            value=""
+            value={item.uuid}
             onChange={handlePriceCheck}
             name={item.itemName + "priceCheck"}
           />
@@ -249,12 +259,6 @@ export default function Items(props) {
         </Row>
         <div
           id="serious-container"
-          onScroll={showDiveEnlarger}
-          className={
-            isExpanded
-              ? "serious-container-big"
-              : "serious-container-small"
-          }
         >
           <div
             id="scroll-pane-expander"
@@ -274,7 +278,12 @@ export default function Items(props) {
               <BsArrowDownCircleFill size={50} color="blue" />
             </span>
           </div>
-          <div id="outer-item-container">{itemsList}</div>
+          <div onScroll={handleDiveResizerDisplay} className={
+            isExpanded
+              ? "items-container-big"
+              : "items-container-small"
+          }
+          >{itemsList}</div>
         </div>
       </form>
     );

@@ -8,7 +8,8 @@
   #sign-up-prompt {
     height: 200px;
   }
-  #main-container-two, #main-container {
+  #main-container-two,
+  #main-container {
     overflow-x: hidden;
     height: 100%;
   }
@@ -19,7 +20,7 @@
   }
 
   .item-delete-button {
-   width: 60px;
+    width: 60px;
   }
 
   #application-logo-container {
@@ -59,21 +60,12 @@
   #expand {
     position: relative;
     left: 290px;
-    top: -30px;
+    top: 80px;
   }
 
   .serious-container-small {
     display: flex;
     flex-direction: column;
-  }
-
-  #outer-item-container {
-    flex: auto;
-    position: relative;
-    top: 120px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    z-index: 1000;
   }
 
   .item-container {
@@ -108,9 +100,34 @@
     position: relative;
     left: -17px;
   }
-
 }
 
+.items-container-small {
+  flex: auto;
+  position: fixed;
+  top: 270px;
+  height: 64%;
+  margin-left: -12px;
+  padding-left: 2px;
+  padding-right: 2px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  box-shadow: 5px 5px 50px #000000;
+  z-index: 1000;
+}
+
+.item-status {
+  opacity: 0.3;
+}
+
+.items-container-big {
+  position: fixed;
+  top: 10px;
+  width: 95vw;
+  height: 99%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
 .item-checkbox {
   position: relative;
   top: 4px;
@@ -261,22 +278,22 @@
   color: rgb(68, 204, 0);
 }
 
-#household {
+.household {
   border-radius: 7px;
   background-color: rgb(102, 204, 0);
 }
 
-#frozen {
+.frozen {
   border-radius: 7px;
   background-color: rgb(77, 195, 255);
 }
 
-#wet {
+.wet {
   border-radius: 7px;
   background-color: rgb(0, 102, 204);
 }
 
-#dry {
+.dry {
   border-radius: 7px;
   background-color: RGB(158, 162, 107);
 }
@@ -300,6 +317,7 @@
 #scroll-pane-shrinker {
   position: fixed;
   top: -10px;
+  z-index: 2000;
 }
 
 .body-row {
@@ -351,9 +369,6 @@
   font-size: 30px;
   font-weight: 600;
 }
-
-
-
 
 /* login page end */
 
@@ -422,9 +437,26 @@
 
   /* Items component start */
 
-  .serious-container-small {
-    display: flex;
-    flex-direction: column;
+  .items-container-small {
+    margin-left: 17px;
+    box-shadow: 5px 5px 50px #000000
+  }
+
+  .items-container-big {
+    width: 500px;
+    box-shadow: 15px 15px 50px #000000
+  }
+
+  #expand {
+    position: relative;
+    left: 350px;
+    top: 80px;
+  }
+
+  #shrink {
+    position: relative;
+    left: 430px;
+    top: 15px;
   }
 
   #outer-item-container {
@@ -436,7 +468,7 @@
     overflow-x: hidden;
   }
 
-  .serious-container-big {
+  /* .serious-container-big {
     position: fixed;
     top: -100px;
     margin-top: 150px;
@@ -444,7 +476,7 @@
     height: 90vh;
     overflow-y: auto;
     overflow-x: hidden;
-  }
+  } */
 
   .item-container {
     padding-top: 15px;
