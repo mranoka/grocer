@@ -5,8 +5,6 @@ import "../index.css";
 import { BsFillArrowUpCircleFill } from "react-icons/bs";
 import { BsArrowDownCircleFill } from "react-icons/bs";
 import { useState } from 'react';
-import { MdExpandCircleDown } from "react-icons/md";
-import { IoIosArrowDropdownCircle } from "react-icons/io";
 
 const controller = new AbortController();
 const signal = controller.signal;
